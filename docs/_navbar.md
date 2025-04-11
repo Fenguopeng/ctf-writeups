@@ -1,8 +1,3 @@
 <!-- _navbar.md -->
-* [Basic](/Basic/)
-* [Web](/Web/)
-* [Misc](/Misc/)
-* [Crypto](/Crypto/)
-* [Pwn](/Pwn/)
-* [Reverse](/Reverse/)
-* [Mobile](/Mobile/)
+* [CTF 指南](//ctf-guide.dropsec.xyz)
+* [CTF 赛题复现](https://github.com/Fenguopeng/ctf-challenges/)
