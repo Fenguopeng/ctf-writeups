@@ -27,4 +27,5 @@
   - [picoCTF 2021](./picoCTF/picoCTF_2021.md)
 - [HTB](./HTB/README.md)
   - [Sherlocks Brutus](./HTB/Sherlocks/Brutus/README.md)
+  - [Sherlocks Bumblebee](./HTB/Sherlocks/Bumblebee/README.md)
 - [御网杯](./御网杯/README.md)
