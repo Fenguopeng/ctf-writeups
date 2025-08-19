@@ -1,0 +1,415 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第四届网鼎杯半决赛 - CTF Writeups</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/pagetoc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CTF Writeups</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/fenguopeng/ctf101" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="2024第四届网鼎杯网络安全大赛半决赛"><a class="header" href="#2024第四届网鼎杯网络安全大赛半决赛">2024第四届“网鼎杯”网络安全大赛半决赛</a></h1>
+<p>第四届“网鼎杯”网络安全大赛半决赛采用“专项技术挑战赛（夺旗赛）”、“安全运营挑战赛（综合防御赛）”及“风险隐患挖掘赛（靶场渗透赛）”三种赛制相融合的竞技方式。</p>
+<h2 id="专项技术挑战赛"><a class="header" href="#专项技术挑战赛">专项技术挑战赛</a></h2>
+<p>考察参赛战队在网络安全领域的技术能力，包括逆向安全、二进制安全、密码学、数据安全及新技术应用（如车联网、物联网、5G 通信），通过解题获取 flag 得分。</p>
+<h3 id="二进制安全"><a class="header" href="#二进制安全">二进制安全</a></h3>
+<h4 id="二进制漏洞挖掘---cardmaster"><a class="header" href="#二进制漏洞挖掘---cardmaster">二进制漏洞挖掘 - cardmaster</a></h4>
+<blockquote>
+<p>请卡牌大师们找出这台切牌机中的漏洞并获取 flag</p>
+</blockquote>
+<h4 id="系统内核漏洞挖掘---generic_kernel_shellcode"><a class="header" href="#系统内核漏洞挖掘---generic_kernel_shellcode">系统内核漏洞挖掘 - Generic_kernel_shellcode</a></h4>
+<blockquote>
+<p>Write a generic linux kernel shellcode?</p>
+</blockquote>
+<h4 id="新编译技术漏洞---jitlover"><a class="header" href="#新编译技术漏洞---jitlover">新编译技术漏洞 - jitlover</a></h4>
+<blockquote>
+<p>这是一台不完全的 JIT 虚拟机，请找到其中的漏洞以获取 flag</p>
+</blockquote>
+<h3 id="密码学"><a class="header" href="#密码学">密码学</a></h3>
+<h4 id="rsa-加密分析---equations"><a class="header" href="#rsa-加密分析---equations">RSA 加密分析 - equations</a></h4>
+<blockquote>
+<p>rsa 真的安全吗</p>
+</blockquote>
+<h4 id="序列密码加密分析---noise"><a class="header" href="#序列密码加密分析---noise">序列密码加密分析 - noise</a></h4>
+<blockquote>
+<p>Let me tell you a story about noisy-nfsr.</p>
+</blockquote>
+<h3 id="数据安全"><a class="header" href="#数据安全">数据安全</a></h3>
+<h4 id="邮件数据分析"><a class="header" href="#邮件数据分析">邮件数据分析</a></h4>
+<blockquote>
+<p>公司的 DLP 软件报警了，并上传了一段流量。你能帮 bob 分析下为什么会产生报警么？</p>
+</blockquote>
+<h4 id="数据安全协议分析"><a class="header" href="#数据安全协议分析">数据安全协议分析</a></h4>
+<blockquote>
+<p>自定义 TLS 协议可能会存在安全问题，本题实现 TLS 的 Hello 部分，再利用 AES CFB 模式的性质伪造签名后的消息。端口为 23333，nc 正常无法连接上，需要根据 server 实现客户端链接。</p>
+</blockquote>
+<h3 id="新技术应用"><a class="header" href="#新技术应用">新技术应用</a></h3>
+<h4 id="车联网日志分析---v2xloganalysis"><a class="header" href="#车联网日志分析---v2xloganalysis">车联网日志分析 - V2XLogAnalysis</a></h4>
+<blockquote>
+<p>车内日志的秘密，日志也能注入？</p>
+</blockquote>
+<p><a href="https://www.bilibili.com/opus/1004129835910430736">https://www.bilibili.com/opus/1004129835910430736</a></p>
+<h4 id="iot-应用容器漏洞---signin"><a class="header" href="#iot-应用容器漏洞---signin">IOT 应用容器漏洞 - signin</a></h4>
+<blockquote>
+<p>难道这是真正的登陆入口吗？</p>
+</blockquote>
+<h4 id="iot-网络协议分析---babyrtp"><a class="header" href="#iot-网络协议分析---babyrtp">IOT 网络协议分析 - babyRTP</a></h4>
+<blockquote>
+<p>这是一个双端都会推流的服务</p>
+</blockquote>
+<h4 id="5g-网络隐私保护---get_supi"><a class="header" href="#5g-网络隐私保护---get_supi">5G 网络隐私保护 - Get_supi</a></h4>
+<blockquote>
+<p>在某些场景下，LTE 网络中用户的 IMSI 会在空口暴露，5G 网络是如何进行隐私保护的？网络侧如何得到用户的 SUPI？（提交请加上 flag{}）</p>
+</blockquote>
+<h3 id="逆向安全"><a class="header" href="#逆向安全">逆向安全</a></h3>
+<h4 id="python-逆向分析---compress"><a class="header" href="#python-逆向分析---compress">python 逆向分析 - compress</a></h4>
+<blockquote>
+<p>一个幽灵，一个EOL的幽灵在代码审计中游荡。</p>
+</blockquote>
+<h4 id="网络通信流量分析---socket"><a class="header" href="#网络通信流量分析---socket">网络通信流量分析 - socket</a></h4>
+<blockquote>
+<p>小鼎同学在日常运维排查中发现了异常通信流量，通过初步定位分析，他获得了客户端、服务端程序以及相关流量，请帮他找出其中异常敏感数据！</p>
+</blockquote>
+<h2 id="安全运营挑战赛"><a class="header" href="#安全运营挑战赛">安全运营挑战赛</a></h2>
+<blockquote>
+<p>在本题目中勒索软件样本为真实样本，请选手一定在虚拟环境中分析，不要在物理机中有任何分析操作，如若造成物理机及数据被加密或损坏，造成损失由选手个人承担，主办方不承担任何责任。</p>
+</blockquote>
+<p>考察参赛战队在典型网络环境中的安全运营能力，包括加固修复、应急响应等任务，通过完成靶机上的对应运营任务得分。</p>
+<h3 id="加固修复"><a class="header" href="#加固修复">加固修复</a></h3>
+<p>SSH 服务于 22 端口，账号 user，密码 123456</p>
+<h4 id="01-加强ssh服务的安全性"><a class="header" href="#01-加强ssh服务的安全性">01 加强SSH服务的安全性</a></h4>
+<blockquote>
+<p>为了防止SSH服务被暴力破解攻击，应禁用密码登录并改用密钥认证。请在Linux服务器上为root用户配置以下公钥以进行验证ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhw/9RBAh4qW36/LZXn80sLIZhq2hAJ7qY9KhzfJ3rW</p>
+</blockquote>
+<pre><code class="language-bash">ssh-keygen -t ed25519
+
+vim /etc/ssh/sshd_config
+</code></pre>
+<h4 id="02-配置nginx重定向和hsts"><a class="header" href="#02-配置nginx重定向和hsts">02 配置Nginx重定向和HSTS</a></h4>
+<blockquote>
+<p>配置Linux服务器的Nginx服务，将所有站点的HTTP请求重定向到HTTPS，并配置严格传输安全策略（HSTS），以确保客户端与服务器之间的通信安全。</p>
+</blockquote>
+<h4 id="03-启用web应用防火墙"><a class="header" href="#03-启用web应用防火墙">03 启用Web应用防火墙</a></h4>
+<blockquote>
+<p>为Nginx服务的默认站点启用ModSecurity Web应用防火墙，并集成OWASP核心规则集（CRS），以防御常见的Web攻击和漏洞利用。</p>
+</blockquote>
+<h4 id="04-加强防火墙策略"><a class="header" href="#04-加强防火墙策略">04 加强防火墙策略</a></h4>
+<blockquote>
+<p>配置Linux服务器的防火墙，使其仅允许通过以下端口的访问：22/tcp（SSH）、53/tcp和53/udp（DNS）、80/tcp（HTTP）、443/tcp（HTTPS）。关闭其他不必要的端口，减少攻击面。</p>
+</blockquote>
+<h4 id="05-优化kubernetes-rbac权限"><a class="header" href="#05-优化kubernetes-rbac权限">05 优化Kubernetes RBAC权限</a></h4>
+<blockquote>
+<p>配置App1应用的Kubernetes RBAC权限，只允许读取App1应用命名空间下所有Pods的信息，防止越权访问其他命名空间的资源。</p>
+</blockquote>
+<h4 id="06-修复kubernetes服务"><a class="header" href="#06-修复kubernetes服务">06 修复Kubernetes服务</a></h4>
+<blockquote>
+<p>使Pods状态为running，确保应用的可用性。</p>
+</blockquote>
+<h4 id="07-修复app2应用漏洞"><a class="header" href="#07-修复app2应用漏洞">07 修复App2应用漏洞</a></h4>
+<blockquote>
+<p>修复App2应用的已知漏洞，并重新部署App2应用，确保其安全性和稳定性。</p>
+</blockquote>
+<h3 id="应急响应"><a class="header" href="#应急响应">应急响应</a></h3>
+<p>ssh 服务于 22 端口，账号 root，密码 FD7!#fd8s
+web 服务于 80 端口，账号 admin，密码 JD67s@!#l</p>
+<h4 id="01-查明并处理植入的后门"><a class="header" href="#01-查明并处理植入的后门">01 查明并处理植入的后门</a></h4>
+<blockquote>
+<p>公司Web业务系统遭受黑客攻击，并被植入后门。请您立即进行排查和处理，确保系统的安全性和完整性。</p>
+</blockquote>
+<h4 id="02-定位持久化服务和木马文件"><a class="header" href="#02-定位持久化服务和木马文件">02 定位持久化服务和木马文件</a></h4>
+<blockquote>
+<p>找到Linux服务器中驻留的持久化服务，并将持久化技术所依赖的二进制木马文件复制到/home/user/checker目录中。</p>
+</blockquote>
+<h4 id="03-卸载恶意模块"><a class="header" href="#03-卸载恶意模块">03 卸载恶意模块</a></h4>
+<blockquote>
+<p>找到Linux服务器被加载的恶意模块并卸载，恢复系统的正常功能。</p>
+</blockquote>
+<h4 id="04-发现并提取隐藏的进程"><a class="header" href="#04-发现并提取隐藏的进程">04 发现并提取隐藏的进程</a></h4>
+<blockquote>
+<p>找到 Linux 服务器中隐藏的进程，并将该进程的二进制文件复制到 /home/user/checker 目录中，为后续分析提供依据。</p>
+</blockquote>
+<h4 id="05-查找被删除的勒案软件名称"><a class="header" href="#05-查找被删除的勒案软件名称">05 查找被删除的勒案软件名称</a></h4>
+<blockquote>
+<p>找到攻击者被记录的删除加密勒索软件的痕迹，尝试恢复分析该勒索软件并提交勒索软件十六进制格式的加密密钥到/home/user/checker/key.txt文件中，以便于解密攻击者勒索的文件。</p>
+</blockquote>
+<h4 id="06-恢复被加密的数据"><a class="header" href="#06-恢复被加密的数据">06 恢复被加密的数据</a></h4>
+<blockquote>
+<p>恢复服务器上被勒索软件加密的分区数据到/home/user/checker目录，确保业务数据的完整性和可用性。</p>
+</blockquote>
+<h4 id="07-查明并处理篡改的首页"><a class="header" href="#07-查明并处理篡改的首页">07 查明并处理篡改的首页</a></h4>
+<blockquote>
+<p>公司Web业务系统首页遭受黑客攻击，并被植入恶意链接。请您立即进行排查和处理受影响的首页，确保系统的可用性、安全性和完整性。</p>
+</blockquote>
+<h3 id="威胁分析"><a class="header" href="#威胁分析">威胁分析</a></h3>
+<p>ssh 服务于 22 端口，账号 root，密码 toor</p>
+<h4 id="01"><a class="header" href="#01">01</a></h4>
+<p>在调查网络性能或安全问题时，了解特定应用程序在一段时间内的数据传输情况对于检测异常流量和潜在威胁至关重要。通过分析网络活动日志，我们可以确定是否存在数据泄露或异常通信。</p>
+<blockquote>
+<p>请问，firefox进程自有记录以来一共发送了多少字节的数据？（请将答案编辑并存入/opt/wxfx/answer/1.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="02"><a class="header" href="#02">02</a></h4>
+<p>识别安全防护软件的查杀记录，对于评估系统受感染的程度和了解攻击者所使用的工具至关重要。通过检查安全日志，可以获取被检测到的威胁信息。</p>
+<blockquote>
+<p>请问，Windows Defender 检测到的第一个恶意软件的威胁ID是什么？（请将答案编辑并存入/opt/wxfx/answer/2.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="03"><a class="header" href="#03">03</a></h4>
+<p>了解恶意软件的内部名称（如开发者给它的命名）有助于识别其家族、版本和特定功能，进而制定有效的防御策略。</p>
+<blockquote>
+<p>请问，系统中正在运行的恶意软件的内部名称是什么？（请将答案编辑并存入/opt/wxfx/answer/3.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="04"><a class="header" href="#04">04</a></h4>
+<p>逆向分析恶意软件时，确定其在进程内存中存储关键数据的位置，对于理解其工作机制和防范进一步的攻击非常重要。</p>
+<blockquote>
+<p>请问，恶意软件在进程内存中存储密钥的内存地址是什么？（请将答案编辑并存入/opt/wxfx/answer/4.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="05"><a class="header" href="#05">05</a></h4>
+<p>分析恶意软件的行为包括了解其在系统中启用了哪些权限，这有助于评估其潜在的危害和攻击范围。通过检查进程的权限列表，可以发现其可能执行的敏感操作。</p>
+<blockquote>
+<p>请问，恶意软件在其进程中启用了多少个权限？（请将答案编辑并存入/opt/wxfx/answer/5.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="06"><a class="header" href="#06">06</a></h4>
+<p>在分析勒索软件的行为时，确定其在内存中加载的位置对于深入理解其运行机制和发现潜在的漏洞非常重要。通过内存取证，可以找到打开勒索软件文件的设备的虚拟地址。</p>
+<blockquote>
+<p>请问，打开勒索软件文件的设备的虚拟地址是什么（16进制）？（请将答案编辑并存入/opt/wxfx/answer/6.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h3 id="溯源反制"><a class="header" href="#溯源反制">溯源反制</a></h3>
+<p>无接入信息，需要通过其他手段实现权限控制</p>
+<h4 id="01-1"><a class="header" href="#01-1">01</a></h4>
+<blockquote>
+<p>在用户家目录留下23798632.txt</p>
+</blockquote>
+<h4 id="02-1"><a class="header" href="#02-1">02</a></h4>
+<blockquote>
+<p>尝试在攻击机上提升权限并在提升权限后在高级用户的家目录中留下862382.txt文件</p>
+</blockquote>
+<h2 id="风险隐患挖掘赛"><a class="header" href="#风险隐患挖掘赛">风险隐患挖掘赛</a></h2>
+<p>考察参赛战队的渗透测试能力，在大型仿真场景中通过信息收集、漏洞扫描和利用获取系统权限或执行命令，找到 flag 提交得分。</p>
+<h2 id="参考资料"><a class="header" href="#参考资料">参考资料</a></h2>
+<ul>
+<li><a href="https://github.com/CTF-Archives/2024-wdb-Semis-IncidentResponse/">https://github.com/CTF-Archives/2024-wdb-Semis-IncidentResponse/</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../wangdingcup/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../longjiancup/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../wangdingcup/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../longjiancup/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../theme/pagetoc.js"></script>
+
+
+
+    </div>
+    </body>
+</html>
