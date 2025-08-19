@@ -3,3 +3,9 @@ authors = ["Fenguopeng"]
 language = "en"
 src = "src"
 title = "CTF Writeups"
+
+[preprocessor.pagetoc]
+[output.html]
+additional-css = ["theme/pagetoc.css"]
+additional-js  = ["theme/pagetoc.js"]
+git-repository-url = "https://github.com/fenguopeng/ctf101"

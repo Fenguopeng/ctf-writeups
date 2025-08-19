@@ -223,15 +223,15 @@ FLAG：`flag{alwaysforward!!}`
 
 > 请你帮助小刘分析流量包，黑客在PLC中写入了flag。flag形如下：flag{xx}
 
-知识点：`流量分析`、`工控流量分析`、`modbus协议`
+知识点：`流量分析`、`工控流量分析`、`modbus协议`、`文件提取`
 
 <!-- 如果题目有附件，提供附件下载 -->
 
 [附件下载](attachments/Misc/demo.txt)
 
 ```shell
-tshark -r sample.pcap -Y "modbus.func_code == 16 and ip.dst == 192.168.4.80" -e "modbus.regnum16" -T fields
-tshark -r sample.pcap -Y "modbus.func_code == 16 and ip.dst == 192.168.4.80" -e "modbus.regval_uint16" -T fields
+tshark -r sample.pcap -Y "modbus.func_code == 16 and ip.dst == 192.168.4.80" -T fields -e "modbus.regnum16" 
+tshark -r sample.pcap -Y "modbus.func_code == 16 and ip.dst == 192.168.4.80" -T fields -e "modbus.regval_uint16"
 ```
 
 导出后前面一些行删除掉。
@@ -264,18 +264,17 @@ out2 = '''35152,20039,3338,6666,0,13,18760,17490,0,202,0,21,2050,0,136,28646,128
 out1 = out1.replace('\n', ',').split(',')
 out2 = out2.replace('\n', ',').split(',')
 
-lst = [(int(a), int(b)) for a, b in zip(out1, out2) if int(a) > 500]
+lst = [(int(a), int(b)) for a, b in zip(out1, out2) if int(a) > 500 and int(a) < 800]
 lst.sort(key=lambda x: x[0])
 print(lst)
 
-f = open('a.png', 'wb')
-for k, v in lst:
-    bt = struct.pack(">H", v)
-    f.write(bt)
-f.close()
+with open("a.png", "wb") as f:
+    for k, v in lst:
+        bt = struct.pack(">H", v)
+        f.write(bt)
 ```
 
-![工控流量分析二](./images/工控流量分析二-1.png)
+![工控流量分析二](./images/工控流量分析二-flag.png)
 
 <!-- 如果为静态 flag，需写明 flag -->
 
@@ -310,18 +309,6 @@ FLAG 为`flag{}`
 `kqfl{xlhh-djx-qqar}`，使用 [CyberChef](https://gchq.github.io/CyberChef/#recipe=ROT13_Brute_Force(true,false,false,100,0,true,'flag')&input=a3FmbHt4bGhoLWRqeC1xcWFyfQ&ieol=CRLF) 的`ROT13_Brute_Force`模块爆破即可。
 
 FLAG：`flag{sgcc-yes-llvm}`
-
-### 能源管理后门查杀
-
-> 能源管理系统Web应用框架被攻击者留下了后门，请定位分析后清理相关后门程序。
-
-<!-- 如果题目有附件，提供附件下载 -->
-
-[附件下载](attachments/Misc/demo.txt)
-
-<!-- 如果为静态 flag，需写明 flag -->
-
-FLAG 为`flag{}`
 
 ## 参考资料
 
