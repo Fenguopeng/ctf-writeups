@@ -1,10 +1,10 @@
 # Summary
 
-- [网鼎杯](./wangdingcup/README.md)
-  - [第四届网鼎杯半决赛](./wangdingcup/第四届网鼎杯_2024_半决赛.md)
 - [强网杯](./qiangwangbei/README.md)
   - [第八届强网杯线上赛](第八届强网杯2024_线上赛.md)
   - [第八届强网杯青少年专项赛](第八届强网杯_2024_青少年专项赛.md)
+- [网鼎杯](./wangdingcup/README.md)
+  - [第四届网鼎杯半决赛](./wangdingcup/第四届网鼎杯_2024_半决赛.md)
 - [陇剑杯](./longjiancup/README.md)
   - [第二届陇剑杯网络安全大赛线上预选赛](./longjiancup/2023/第二届陇剑杯网络安全大赛_2023_线上预选赛.md)
 - [CISCN](./ciscn/README.md)
