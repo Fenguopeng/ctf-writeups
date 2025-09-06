@@ -19,6 +19,11 @@
   - [2024年能源网络安全大赛团体决赛](./能源网络安全大赛_2024_团体决赛/README.md)
   - [2024年能源网络安全大赛个人决赛](./能源网络安全大赛_2024_个人决赛/README.md)
   - [2024年能源网络安全大赛预赛](./能源网络安全大赛_2024_Qualifier/README.md)
+- [熵密杯](./cryptocup/README.md)
+  - [2025年第三届熵密杯密码安全挑战赛](./cryptocup/2025/第三届熵密杯密码安全挑战赛_2025.md)
+  - [2024年第二届熵密杯密码安全挑战赛](./cryptocup/2024/第二届熵密杯密码安全挑战赛_2024.md)
+  - [2023年首届熵密杯密码应用安全竞赛](./cryptocup/2023/首届熵密杯密码应用安全竞赛_2023.md)
+  
 - [picoCTF](./picoCTF/README.md)
   - [picoCTF 2025](./picoCTF/picoCTF_2025.md)
   - [picoCTF 2024](./picoCTF/picoCTF_2024.md)
@@ -28,4 +33,5 @@
 - [HTB](./HTB/README.md)
   - [Sherlocks Brutus](./HTB/Sherlocks/Brutus/README.md)
   - [Sherlocks Bumblebee](./HTB/Sherlocks/Bumblebee/README.md)
+  - [Sherlocks Operation Blackout 2025: Phantom Check](./HTB/Sherlocks/Phantom%20Check/README.md)
 - [御网杯](./御网杯/README.md)
